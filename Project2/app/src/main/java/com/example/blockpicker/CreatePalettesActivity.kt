@@ -22,20 +22,20 @@ class CreatePalettesActivity : AppCompatActivity() {
     // init variables
     private lateinit var createBlock : ArrayList<ImageView>
     private lateinit var currentBlock : ImageView
-    private lateinit var paletteList : TextView
+    private lateinit var paletteList : ArrayList<TextView>
     private lateinit var paletteName : TextInputLayout
     private lateinit var createButton : Button
 
+    // store palette information
+    private lateinit var blockName : Array<String>
     private var currentBlockIndex = 0
     private var currentBlockSize = 0;
-    private lateinit var blockName : Array<String>
+    private var highlightImage = -1;
 
     private lateinit var block : TextView
     private lateinit var blockList : ArrayList<String>
     private lateinit var dialog : Dialog
 
-    private lateinit var searchBlock : EditText
-    private lateinit var listBlocks : ListView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +46,7 @@ class CreatePalettesActivity : AppCompatActivity() {
         Log.d("CreatePalettesActivity", "onCreate called!")
 
         // set title
-        title = resources.getText(R.string.CreatePalettes);
+        title = resources.getText(R.string.create_palettes);
 
 
         // set value in array list
@@ -73,7 +73,15 @@ class CreatePalettesActivity : AppCompatActivity() {
             createBlock.add(createBlockView)
         }
 
-        paletteList = findViewById(R.id.PaletteBlockList)
+        // findViewById(R.id.PaletteBlock1)
+        paletteList = ArrayList<TextView>(6)
+        var paletteBlockId = arrayOf(R.id.PaletteBlock1,R.id.PaletteBlock2,R.id.PaletteBlock3,R.id.PaletteBlock4,R.id.PaletteBlock5,R.id.PaletteBlock6);
+
+        // get ImageView by and set on click listeners
+        for(i in paletteBlockId.indices){
+            var createPaletteText : TextView = findViewById(paletteBlockId[i])
+            paletteList.add(createPaletteText)
+        }
 
         paletteName = findViewById(R.id.NamePalette)
 
@@ -89,8 +97,8 @@ class CreatePalettesActivity : AppCompatActivity() {
         dialog = builder.create()
         dialog.show()
 
-        searchBlock = dialog.findViewById(R.id.SearchBlock)
-        listBlocks = dialog.findViewById(R.id.ListBlocks)
+        val searchBlock : EditText = dialog.findViewById(R.id.SearchBlock)
+        val listBlocks : ListView = dialog.findViewById(R.id.ListBlocks)
 
         val adapter: ArrayAdapter<*> = ArrayAdapter(this,
             android.R.layout.simple_list_item_1, blockList)
@@ -124,7 +132,9 @@ class CreatePalettesActivity : AppCompatActivity() {
                 paletteName.hint = "$blockSelected Palette"
             }
 
-            paletteList.text = blockName.joinToString().replace(", ","")
+            for(i in paletteList.indices){
+                paletteList[i].text = blockName[i]
+            }
 
             var blockId = blockSelected.lowercase().replace(" ","_")
             Log.d("CreatePalettesActivity", "Block Filename: $blockId")

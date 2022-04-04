@@ -14,18 +14,18 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
     class ViewHolder (rootLayout: View) : RecyclerView.ViewHolder(rootLayout){
 
         // bitmaps
-        val blockBitmap1: ImageView = rootLayout.findViewById(R.id.BlockBitmap1)
-        val blockBitmap2: ImageView = rootLayout.findViewById(R.id.BlockBitmap2)
-        val blockBitmap3: ImageView = rootLayout.findViewById(R.id.BlockBitmap3)
-        val blockBitmap4: ImageView = rootLayout.findViewById(R.id.BlockBitmap4)
-        val blockBitmap5: ImageView = rootLayout.findViewById(R.id.BlockBitmap5)
-        val blockBitmap6: ImageView = rootLayout.findViewById(R.id.BlockBitmap6)
+        val blockBitmap1: ImageView = rootLayout.findViewById(R.id.ProfileBlockBitmap1)
+        val blockBitmap2: ImageView = rootLayout.findViewById(R.id.ProfileBlockBitmap2)
+        val blockBitmap3: ImageView = rootLayout.findViewById(R.id.ProfileBlockBitmap3)
+        val blockBitmap4: ImageView = rootLayout.findViewById(R.id.ProfileBlockBitmap4)
+        val blockBitmap5: ImageView = rootLayout.findViewById(R.id.ProfileBlockBitmap5)
+        val blockBitmap6: ImageView = rootLayout.findViewById(R.id.ProfileBlockBitmap6)
 
         // palettes info
-        val paletteName: TextView = rootLayout.findViewById(R.id.PaletteName)
+        val paletteName: TextView = rootLayout.findViewById(R.id.ProfilePaletteName)
         val paletteAvatar: ImageView = rootLayout.findViewById(R.id.PaletteAuthorAvatar)
         val paletteAuthor: TextView = rootLayout.findViewById(R.id.PaletteAuthor)
-        val paletteSaved: TextView = rootLayout.findViewById(R.id.PaletteSaved)
+        val paletteSaved: TextView = rootLayout.findViewById(R.id.PaletteProfileSaved)
     }
 
     // The RecyclerView needs a new row

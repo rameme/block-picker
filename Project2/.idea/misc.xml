@@ -3,14 +3,29 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/drawable/ic_baseline_favorite.xml" value="0.24270833333333333" />
+        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/drawable/ic_expand.xml" value="0.24270833333333333" />
+        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/drawable/ic_favorite.xml" value="0.24270833333333333" />
+        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/drawable/ic_favorite_border.xml" value="0.24270833333333333" />
+        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/drawable/ic_favorite_empty.xml" value="0.24270833333333333" />
+        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/drawable/ic_favorite_fill.xml" value="0.24270833333333333" />
+        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/drawable/ic_image.xml" value="0.18888888888888888" />
+        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/drawable/ic_image_search.xml" value="0.18888888888888888" />
+        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/drawable/ic_launcher_background.xml" value="0.24270833333333333" />
+        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/drawable/outline.xml" value="0.24270833333333333" />
         <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/layout/activity_main.xml" value="0.17028985507246377" />
         <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/layout/activity_main2.xml" value="0.2125" />
-        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/layout/create_palettes_activity.xml" value="0.16" />
+        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/layout/create_palettes_activity.xml" value="0.264" />
+        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/layout/find_palettes_activity.xml" value="0.14719202898550723" />
+        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/layout/login_activity.xml" value="0.12751677852348994" />
         <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/layout/palettes.xml" value="0.1" />
-        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/layout/palettes_activity.xml" value="0.17028985507246377" />
+        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/layout/palettes_activity.xml" value="0.10059171597633136" />
+        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/layout/profile_activity.xml" value="0.1" />
         <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/layout/row_palette.xml" value="0.12158054711246201" />
         <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/layout/row_palettes.xml" value="0.264" />
+        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/layout/row_palettes_profile.xml" value="0.1816123188405797" />
         <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/layout/searchable_spinner.xml" value="0.15942028985507245" />
+        <entry key="..\:/Users/Ramim Alam/Desktop/Ramim/Courses/Spring 2022/Hand Held Design/project-2-byoi-ramim/Project2/app/src/main/res/layout/signup_activity.xml" value="0.1816123188405797" />
       </map>
     </option>
   </component>

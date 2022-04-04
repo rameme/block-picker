@@ -8,10 +8,9 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:background="@android:color/white"
         android:orientation="vertical"
         android:padding="16dp"
+        android:theme="@style/Theme.BlockPicker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,7 +20,7 @@
             android:id="@+id/SearchBlockTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select Block"
+            android:text="@string/select_block_search"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -33,7 +32,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:background="@android:drawable/editbox_background"
             android:hint="Search..."
             android:padding="12dp"
             android:singleLine="true" />

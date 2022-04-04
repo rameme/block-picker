@@ -115,18 +115,6 @@
                 tools:text="1" />
 
             <TextView
-                android:id="@+id/PaletteAuthor"
-                android:layout_width="wrap_content"
-                android:layout_height="27dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/palettes_author"
-                android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/AvatarCard"
-                app:layout_constraintTop_toBottomOf="@+id/ProfilePaletteName"
-                tools:text="Rameme" />
-
-            <TextView
                 android:id="@+id/ProfilePaletteName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -151,27 +139,6 @@
                 app:layout_constraintEnd_toStartOf="@+id/PaletteProfileSaved"
                 app:layout_constraintTop_toBottomOf="@+id/ProfileBlockBitmap6"
                 app:srcCompat="@drawable/ic_favorite_red" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/AvatarCard"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                app:cardCornerRadius="6dp"
-                app:cardElevation="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ProfilePaletteName">
-
-                <ImageView
-                    android:id="@+id/PaletteAuthorAvatar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:srcCompat="@drawable/avatar"
-                    tools:srcCompat="@tools:sample/avatars" />
-            </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
