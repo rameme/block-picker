@@ -86,3 +86,42 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
         return palettes.size
     }
 }
+
+/* fake date for our adapter */
+fun getFakePalettes(): List<Palettes> {
+    return listOf(
+        Palettes(
+            name = "Blocks",
+            author = "rameme",
+            likes = 10,
+            blockBitmap1 = R.drawable.green_wool,
+            blockBitmap2 = R.drawable.green_terracotta,
+            blockBitmap3 = R.drawable.dark_oak_log,
+            blockBitmap4 = R.drawable.brain_coral_block,
+            blockBitmap5 = R.drawable.mossy_stone_bricks,
+            blockBitmap6 = R.drawable.moss_block,
+        ),
+        Palettes(
+            name = "Blocks",
+            author = "rameme",
+            likes = 10,
+            blockBitmap1 = R.drawable.stripped_birch_log,
+            blockBitmap2 = R.drawable.prismarine,
+            blockBitmap3 = R.drawable.sea_lantern,
+            blockBitmap4 = R.drawable.birch_planks,
+            blockBitmap5 = R.drawable.prismarine_bricks,
+            blockBitmap6 = R.drawable.deepslate_tiles,
+        ),
+        Palettes(
+            name = "Blocks",
+            author = "rameme",
+            likes = 10,
+            blockBitmap1 = R.drawable.blackstone,
+            blockBitmap2 = R.drawable.gray_concrete,
+            blockBitmap3 = R.drawable.gray_concrete_powder,
+            blockBitmap4 = R.drawable.stone,
+            blockBitmap5 = R.drawable.stone_bricks,
+            blockBitmap6 = R.drawable.andesite,
+        ),
+    )
+}

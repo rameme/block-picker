@@ -42,6 +42,12 @@
     <string name="hint">Use pre-generated name or your own</string>
     <string name="select_block_search">Select Block</string>
 
+    <!-- Menu -->
+    <string name="search_menu">Search</string>
+    <string name="create_menu">Create Palette</string>
+    <string name="profile_menu">Profile</string>
+    <string name="close_menu">Close</string>
+
     <!-- Blocks -->
     <!-- SPINNER -->
     <string name="defaultSelected">Tap on image to set block</string>

@@ -13,8 +13,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var password: EditText
     private lateinit var loginButton : Button
     private lateinit var signupButton : Button
-    private lateinit var profileButton : Button
-    private lateinit var createPaletteButton : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,20 +34,6 @@ class LoginActivity : AppCompatActivity() {
         signupButton = findViewById(R.id.Signup)
         signupButton.setOnClickListener(){ view ->
             val intent = Intent(this, SignupActivity::class.java)
-            startActivity(intent)
-        }
-
-        profileButton = findViewById(R.id.Profile)
-        profileButton.setOnClickListener(){ view ->
-            Log.d("LoginActivity", "Switch to ProfileActivity!")
-            val intent = Intent(this, ProfileActivity::class.java)
-            startActivity(intent)
-        }
-
-        createPaletteButton = findViewById(R.id.Create)
-        createPaletteButton.setOnClickListener(){ view ->
-            Log.d("LoginActivity", "Switch to CreatePalettesActivity!")
-            val intent = Intent(this, CreatePalettesActivity::class.java)
             startActivity(intent)
         }
     }

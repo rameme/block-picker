@@ -1,14 +1,10 @@
 package com.example.blockpicker
 
-import android.graphics.Bitmap
-import android.util.Log
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
-import org.json.JSONArray
 import org.json.JSONObject
-import java.util.*
 
 class ProfileManager {
     private val okHttpClient: OkHttpClient
@@ -45,6 +41,7 @@ class ProfileManager {
             return UUID
         }
 
+        // return empty string
         return ""
     }
 }

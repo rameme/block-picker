@@ -2,10 +2,13 @@ package com.example.blockpicker
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
@@ -29,14 +32,11 @@ class CreatePalettesActivity : AppCompatActivity() {
     // store palette information
     private lateinit var blockName : Array<String>
     private var currentBlockIndex = 0
-    private var currentBlockSize = 0;
-    private var highlightImage = -1;
+    private var currentPaletteSize = 0;
 
     private lateinit var block : TextView
     private lateinit var blockList : ArrayList<String>
     private lateinit var dialog : Dialog
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +65,9 @@ class CreatePalettesActivity : AppCompatActivity() {
         // get ImageView by and set on click listeners
         for(i in imageViewId.indices){
             var createBlockView : ImageView = findViewById(imageViewId[i])
-            createBlockView.setOnClickListener() { view ->
+
+            // setOnClickListerns for the image views
+            createBlockView.setOnClickListener() {
                 currentBlock = createBlockView
                 currentBlockIndex = i
                 selectBlock()
@@ -77,7 +79,7 @@ class CreatePalettesActivity : AppCompatActivity() {
         paletteList = ArrayList<TextView>(6)
         var paletteBlockId = arrayOf(R.id.PaletteBlock1,R.id.PaletteBlock2,R.id.PaletteBlock3,R.id.PaletteBlock4,R.id.PaletteBlock5,R.id.PaletteBlock6);
 
-        // get ImageView by and set on click listeners
+        // get ImageView by and TODO: set on click listeners
         for(i in paletteBlockId.indices){
             var createPaletteText : TextView = findViewById(paletteBlockId[i])
             paletteList.add(createPaletteText)
@@ -105,26 +107,30 @@ class CreatePalettesActivity : AppCompatActivity() {
 
         listBlocks.adapter = adapter
 
+        // filter blocks by search item
         searchBlock.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                adapter.getFilter().filter(p0);
+                adapter.filter.filter(p0);
             }
 
             override fun afterTextChanged(p0: Editable?) {
             }
         })
 
+        // click on the desired block name to set the image bitmap
         listBlocks.onItemClickListener = OnItemClickListener { parent, view, position, id -> // when item selected from list
             // set selected item on textView
             var blockSelected = parent.getItemAtPosition(position) as String
 
+            // increase palette size if the imageView was empty
             if(blockName[currentBlockIndex].isEmpty()){
-                currentBlockSize += 1
+                currentPaletteSize += 1
             }
 
+            // set the block name
             blockName[currentBlockIndex] = "$blockSelected\n"
 
             // if first block is changed change palette hint
@@ -132,18 +138,17 @@ class CreatePalettesActivity : AppCompatActivity() {
                 paletteName.hint = "$blockSelected Palette"
             }
 
-            for(i in paletteList.indices){
-                paletteList[i].text = blockName[i]
-            }
+            // change text to current block
+            paletteList[currentBlockIndex].text = blockName[currentBlockIndex]
 
+            // get the drawable ID from block name
             var blockId = blockSelected.lowercase().replace(" ","_")
-            Log.d("CreatePalettesActivity", "Block Filename: $blockId")
-
             val resId = resources.getIdentifier(
                 blockId, "drawable",
                 packageName
             )
 
+            // load image
             Picasso
                 .get()
                 .load(resId)
@@ -152,9 +157,30 @@ class CreatePalettesActivity : AppCompatActivity() {
             // Dismiss dialog
             dialog.dismiss()
 
-            if(currentBlockSize == 6){
+            // if 6 images are set, then enable the save button
+            if(currentPaletteSize == 6){
                 createButton.isEnabled = true
             }
         }
+    }
+
+    /* Close Create Palettes Menu */
+    // create an action bar button
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.close, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    // handle button activities
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // go to palettes activity
+        when (item.itemId) {
+            R.id.CloseMenu -> {
+                Log.d("CreatePalettesActivity", "Switch to PalettesActivity!")
+                val intent = Intent(this, PalettesActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
