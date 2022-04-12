@@ -2,7 +2,9 @@ package com.example.blockpicker
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,23 +15,30 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
 import android.widget.TextView
-
 import android.widget.ArrayAdapter
 import java.util.*
 import android.widget.EditText
 import android.widget.AdapterView.OnItemClickListener
-import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import kotlin.collections.ArrayList
 
 class CreatePalettesActivity : AppCompatActivity() {
 
-    // init variables
+    // Firebase
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private lateinit var firebaseDatabase: FirebaseDatabase
+
+    // Init variables
     private lateinit var createBlock : ArrayList<ImageView>
     private lateinit var currentBlock : ImageView
     private lateinit var paletteList : ArrayList<TextView>
-    private lateinit var paletteName : TextInputLayout
+    private lateinit var paletteName : EditText
     private lateinit var createButton : Button
 
-    // store palette information
+    // Store palette information
     private lateinit var blockName : Array<String>
     private var currentBlockIndex = 0
     private var currentPaletteSize = 0;
@@ -38,35 +47,44 @@ class CreatePalettesActivity : AppCompatActivity() {
     private lateinit var blockList : ArrayList<String>
     private lateinit var dialog : Dialog
 
+    // TODO: progress bar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.create_palettes_activity)
 
-        // log it
+        // Log it
         Log.d("CreatePalettesActivity", "onCreate called!")
 
-        // set title
+        // Set title
         title = resources.getText(R.string.create_palettes);
 
+        // SharedPreferences
+        val sharedPrefs: SharedPreferences = getSharedPreferences("block-picker", Context.MODE_PRIVATE)
 
-        // set value in array list
+        // Firebase
+        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        firebaseDatabase = FirebaseDatabase.getInstance()
+
+        // Set value in array list
         blockList = ArrayList<String>()
         blockList = arrayListOf<String>(*resources.getStringArray(R.array.blocks))
 
         // Text View
         block = findViewById(R.id.SearchBlocks)
 
-        /* image view */
+        /* Image View */
         createBlock = ArrayList<ImageView>(6)
         blockName = arrayOf("","","","","","")
 
         var imageViewId = arrayOf(R.id.CreateBlock1,R.id.CreateBlock2,R.id.CreateBlock3,R.id.CreateBlock4,R.id.CreateBlock5,R.id.CreateBlock6);
 
-        // get ImageView by and set on click listeners
+        // Get ImageView by ID and set OnClickListeners
         for(i in imageViewId.indices){
             var createBlockView : ImageView = findViewById(imageViewId[i])
 
-            // setOnClickListerns for the image views
+            // OnClickListeners for the image views
             createBlockView.setOnClickListener() {
                 currentBlock = createBlockView
                 currentBlockIndex = i
@@ -75,19 +93,65 @@ class CreatePalettesActivity : AppCompatActivity() {
             createBlock.add(createBlockView)
         }
 
-        // findViewById(R.id.PaletteBlock1)
+        /* TextView */
         paletteList = ArrayList<TextView>(6)
         var paletteBlockId = arrayOf(R.id.PaletteBlock1,R.id.PaletteBlock2,R.id.PaletteBlock3,R.id.PaletteBlock4,R.id.PaletteBlock5,R.id.PaletteBlock6);
 
-        // get ImageView by and TODO: set on click listeners
+        // Get ImageView by and TODO: set on click listeners to highlight block
         for(i in paletteBlockId.indices){
             var createPaletteText : TextView = findViewById(paletteBlockId[i])
             paletteList.add(createPaletteText)
         }
 
+        // PaletteName input
         paletteName = findViewById(R.id.NamePalette)
 
+        // Create palette
         createButton = findViewById(R.id.PaletteCreate)
+        createButton.setOnClickListener(){
+            firebaseAnalytics.logEvent("create_button_clicked", null)
+
+            val UID: String = FirebaseAuth.getInstance().currentUser!!.uid!!
+
+            // Get paletteName
+            var inputtedPaletteName = paletteName.text.toString().trim()
+            if (inputtedPaletteName.isBlank()){
+                inputtedPaletteName = paletteName.hint.toString().trim()
+            }
+
+            // Get author and minecraft UUID from sharedPrefs
+            val author = sharedPrefs.getString("USERNAME", "")
+            val minecraftUUID = sharedPrefs.getString("UUID", "")
+
+            // Create palette object
+            val palette = Palettes(
+                name = inputtedPaletteName,
+                author = author!!,
+                authorUID = UID,
+                minecraftUUID = minecraftUUID!!,
+                likes = 0,
+                block1 = blockName[0].trim(),
+                block2 = blockName[1].trim(),
+                block3 = blockName[2].trim(),
+                block4 = blockName[3].trim(),
+                block5 = blockName[4].trim(),
+                block6 = blockName[5].trim()
+            )
+
+            // Store palette on Firebase
+            val referencePalettes = firebaseDatabase.getReference("palettes")
+            referencePalettes.push().setValue(palette)
+
+            // Go to PalettesActivity
+            val intent = Intent(createButton.context, PalettesActivity::class.java)
+            startActivity(intent)
+
+            // Prevent user from backing into the palettes screen
+            finish()
+
+        }
+
+        // Disable the create button
         createButton.isEnabled = false
     }
 
@@ -96,6 +160,7 @@ class CreatePalettesActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this@CreatePalettesActivity)
         builder.setView(R.layout.searchable_spinner)
 
+        // Show dialog to search for blocks
         dialog = builder.create()
         dialog.show()
 
@@ -107,7 +172,7 @@ class CreatePalettesActivity : AppCompatActivity() {
 
         listBlocks.adapter = adapter
 
-        // filter blocks by search item
+        // Filter blocks by search item
         searchBlock.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
@@ -120,35 +185,35 @@ class CreatePalettesActivity : AppCompatActivity() {
             }
         })
 
-        // click on the desired block name to set the image bitmap
+        // Click on the desired block name to set the image bitmap
         listBlocks.onItemClickListener = OnItemClickListener { parent, view, position, id -> // when item selected from list
-            // set selected item on textView
+            // Set selected item on textView
             var blockSelected = parent.getItemAtPosition(position) as String
 
-            // increase palette size if the imageView was empty
+            // Increase palette size if the imageView was empty
             if(blockName[currentBlockIndex].isEmpty()){
                 currentPaletteSize += 1
             }
 
-            // set the block name
+            // Set the block name
             blockName[currentBlockIndex] = "$blockSelected\n"
 
-            // if first block is changed change palette hint
+            // If first block is changed change palette hint
             if(currentBlockIndex == 0){
                 paletteName.hint = "$blockSelected Palette"
             }
 
-            // change text to current block
+            // Change text to current block
             paletteList[currentBlockIndex].text = blockName[currentBlockIndex]
 
-            // get the drawable ID from block name
+            // Get the drawable ID from block name
             var blockId = blockSelected.lowercase().replace(" ","_")
             val resId = resources.getIdentifier(
                 blockId, "drawable",
                 packageName
             )
 
-            // load image
+            // Load image
             Picasso
                 .get()
                 .load(resId)
@@ -157,7 +222,7 @@ class CreatePalettesActivity : AppCompatActivity() {
             // Dismiss dialog
             dialog.dismiss()
 
-            // if 6 images are set, then enable the save button
+            // If 6 images are set, then enable the save button
             if(currentPaletteSize == 6){
                 createButton.isEnabled = true
             }
@@ -165,13 +230,13 @@ class CreatePalettesActivity : AppCompatActivity() {
     }
 
     /* Close Create Palettes Menu */
-    // create an action bar button
+    // Create an action bar button
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.close, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
-    // handle button activities
+    // Handle button activities
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // go to palettes activity
         when (item.itemId) {

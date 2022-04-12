@@ -2,18 +2,40 @@
     <string name="app_name">Block Picker</string>
 
     <!-- Login Activity -->
+    <string name="login_activity_title">Login to Your Account</string>
     <string name="login_title">Login</string>
-    <string name="username_login">Username</string>
+    <string name="email_login">Email</string>
     <string name="password_login">Password</string>
     <string name="login">Login</string>
     <string name="signup">Sign Up</string>
 
+    <string name="login_success">Registered successfully as %1$s</string>
+    <string name="login_no_user">No Registered Account</string>
+    <string name="login_failure_wrong_credentials">Please check your username or password</string>
+    <string name="login_failure_generic">Failed to login: %1$s</string>
+
+    <string name="failed_to_retrieve_account">Failed to retrieve account information</string>
+
+
     <!-- Signup Activity -->
+    <string name="signup_activity_title">Create Block Picker Account</string>
     <string name="signup_title">Sign Up</string>
-    <string name="username_signup">Username</string>
+    <string name="signup_button">Create Account</string>
+    <string name="email_signup">Email</string>
+    <string name="signup_username">Username</string>
     <string name="password_signup">Password</string>
-    <string name="verify_password_signup">Password</string>
+    <string name="verify_password_signup">Verify Password</string>
     <string name="minecraft_username_signup">Minecraft Username</string>
+    <string name="password_verify">Password does not match</string>
+
+    <string name="signup_failure_invalid_mc_username">Invalid Minecraft Username</string>
+    <string name="signup_success">Registered successfully</string>
+    <string name="signup_failure_db_update">Failed to signup. Please create a new account.</string>
+    <string name="signup_failure_generic">Failed to register: %1$s</string>
+    <string name="signup_failure_weak_username">Username must be at least 5 characters long.</string>
+    <string name="signup_failure_weak_password">Password must be at least 6 characters long.</string>
+    <string name="signup_failure_already_exists">An account already exists for this email!</string>
+    <string name="signup_failure_invalid_format">You must provide a correctly formatted email!</string>
 
     <!-- Profile -->
     <string name="profile">Profile</string>
@@ -21,7 +43,6 @@
     <string name="username_profile">Username</string>
     <string name="create_palettes_profile">Created Palettes</string>
     <string name="save_palettes_profile">Saved Palettes</string>
-
 
     <!-- Palettes Activity -->
     <string name="palettes_activity_title">Featured Palettes</string>
@@ -32,6 +53,8 @@
     <string name="palettes_description">Featured block palettes most liked by our users.</string>
     <string name="palettes_search">Search</string>
 
+    <string name="failed_to_retrieve_palettes">Failed to retrieve palettes</string>
+
     <!-- Create Palettes Activity -->
     <string name="create_palettes">Create Block Palette</string>
     <string name="name_palette">Palette Name:</string>
@@ -41,6 +64,7 @@
     <string name="select_block">Clicked on block</string>
     <string name="hint">Use pre-generated name or your own</string>
     <string name="select_block_search">Select Block</string>
+
 
     <!-- Menu -->
     <string name="search_menu">Search</string>

@@ -1,5 +1,6 @@
 package com.example.blockpicker
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +11,10 @@ import com.squareup.picasso.Picasso
 
 class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<PalettesAdapter.ViewHolder>(){
 
-    // row display 6 images
+    // Block Palettes
     class ViewHolder (rootLayout: View) : RecyclerView.ViewHolder(rootLayout){
 
-        // bitmaps
+        // Palettes consists of 6 images
         val blockBitmap1: ImageView = rootLayout.findViewById(R.id.ProfileBlockBitmap1)
         val blockBitmap2: ImageView = rootLayout.findViewById(R.id.ProfileBlockBitmap2)
         val blockBitmap3: ImageView = rootLayout.findViewById(R.id.ProfileBlockBitmap3)
@@ -21,107 +22,128 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
         val blockBitmap5: ImageView = rootLayout.findViewById(R.id.ProfileBlockBitmap5)
         val blockBitmap6: ImageView = rootLayout.findViewById(R.id.ProfileBlockBitmap6)
 
-        // palettes info
+        // Additional Palette information: name, avatar, author, and likes
         val paletteName: TextView = rootLayout.findViewById(R.id.ProfilePaletteName)
         val paletteAvatar: ImageView = rootLayout.findViewById(R.id.PaletteAuthorAvatar)
         val paletteAuthor: TextView = rootLayout.findViewById(R.id.PaletteAuthor)
         val paletteSaved: TextView = rootLayout.findViewById(R.id.PaletteProfileSaved)
     }
 
-    // The RecyclerView needs a new row
+    //  Create new rows
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        // A LayoutInflater is an object that knows how to read & parse an XML file
         val layoutInflater: LayoutInflater = LayoutInflater.from(parent.context)
-
-        // Read & parse the XML file to create a new row at runtime
         val rootLayout: View = layoutInflater.inflate(R.layout.row_palettes, parent, false)
-
-        // We can now create a ViewHolder from the root view
         val viewHolder = ViewHolder(rootLayout)
         return viewHolder
     }
 
-    // The RecyclerView is ready to display a new (or recycled) row on the screen, represented a our ViewHolder.
-    // We're given the row position / index that needs to be rendered.
+    // Display row on the screen
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentPalettes = palettes[position]
 
+        val context = holder.blockBitmap1.context
+
+        // Show block palette
         Picasso
             .get()
-            .load(currentPalettes.blockBitmap1)
+            .load(getResId(currentPalettes.block1, context))
             .into(holder.blockBitmap1)
+
 
         Picasso
             .get()
-            .load(currentPalettes.blockBitmap2)
+            .load(getResId(currentPalettes.block2, context))
             .into(holder.blockBitmap2)
 
         Picasso
             .get()
-            .load(currentPalettes.blockBitmap3)
+            .load(getResId(currentPalettes.block3, context))
             .into(holder.blockBitmap3)
 
         Picasso
             .get()
-            .load(currentPalettes.blockBitmap4)
+            .load(getResId(currentPalettes.block4, context))
             .into(holder.blockBitmap4)
 
         Picasso
             .get()
-            .load(currentPalettes.blockBitmap5)
+            .load(getResId(currentPalettes.block5, context))
             .into(holder.blockBitmap5)
 
         Picasso
             .get()
-            .load(currentPalettes.blockBitmap6)
+            .load(getResId(currentPalettes.block6, context))
             .into(holder.blockBitmap6)
+
+        // Show Avatar
+        Picasso
+            .get()
+            .load("https://crafatar.com/avatars/${currentPalettes.minecraftUUID}")
+            .into(holder.paletteAvatar)
 
         holder.paletteName.text = currentPalettes.name
         holder.paletteAuthor.text = currentPalettes.author
         holder.paletteSaved.text = currentPalettes.likes.toString()
     }
 
-    // total rows we want the adapter to render
+    // Total rows we want the adapter to render
     override fun getItemCount(): Int {
         return palettes.size
     }
+
+    // Helper function: get the resource ID from the block name
+    private fun getResId(block: String, context: Context): Int {
+        // Get the drawable ID from block name
+        var block1Id = block.lowercase().replace(" ", "_")
+
+        return context.resources.getIdentifier(
+            block1Id, "drawable",
+            context.packageName
+        )
+    }
 }
 
-/* fake date for our adapter */
+/* Fake date for our adapter */
 fun getFakePalettes(): List<Palettes> {
     return listOf(
         Palettes(
             name = "Blocks",
             author = "rameme",
+            authorUID = "0",
+            minecraftUUID = "0",
             likes = 10,
-            blockBitmap1 = R.drawable.green_wool,
-            blockBitmap2 = R.drawable.green_terracotta,
-            blockBitmap3 = R.drawable.dark_oak_log,
-            blockBitmap4 = R.drawable.brain_coral_block,
-            blockBitmap5 = R.drawable.mossy_stone_bricks,
-            blockBitmap6 = R.drawable.moss_block,
+            block1 = "Green Wool",
+            block2 = "Green Terracotta",
+            block3 = "Dark Oak Log",
+            block4 = "Brain Coral Block",
+            block5 = "Mossy Stone Bricks",
+            block6 = "Moss_block",
         ),
         Palettes(
             name = "Blocks",
             author = "rameme",
+            authorUID = "0",
+            minecraftUUID = "0",
             likes = 10,
-            blockBitmap1 = R.drawable.stripped_birch_log,
-            blockBitmap2 = R.drawable.prismarine,
-            blockBitmap3 = R.drawable.sea_lantern,
-            blockBitmap4 = R.drawable.birch_planks,
-            blockBitmap5 = R.drawable.prismarine_bricks,
-            blockBitmap6 = R.drawable.deepslate_tiles,
+            block1 = "Stripped_birch Log",
+            block2 = "Prismarine",
+            block3 = "Sea Lantern",
+            block4 = "Birch Planks",
+            block5 = "Prismarine Bricks",
+            block6 = "Deepslate Tiles",
         ),
         Palettes(
             name = "Blocks",
             author = "rameme",
+            authorUID = "0",
+            minecraftUUID = "0",
             likes = 10,
-            blockBitmap1 = R.drawable.blackstone,
-            blockBitmap2 = R.drawable.gray_concrete,
-            blockBitmap3 = R.drawable.gray_concrete_powder,
-            blockBitmap4 = R.drawable.stone,
-            blockBitmap5 = R.drawable.stone_bricks,
-            blockBitmap6 = R.drawable.andesite,
+            block1 = "Blackstone",
+            block2 = "Gray Concrete",
+            block3 = "Gray Concrete Powder",
+            block4 = "Stone",
+            block5 = "Stone_bricks",
+            block6 = "Andesite",
         ),
     )
 }

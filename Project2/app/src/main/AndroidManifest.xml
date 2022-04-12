@@ -21,15 +21,24 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SignupActivity" />
+        <activity
+            android:name=".SignupActivity"
+            android:parentActivityName=".LoginActivity" />
 
-        <activity android:name=".ProfileActivity" />
+        <activity
+            android:name=".PalettesActivity" />
 
-        <activity android:name=".PalettesActivity" />
+        <activity
+            android:name=".ProfileActivity"
+            android:parentActivityName=".PalettesActivity" />
 
-        <activity android:name=".FindPalettesActivity" />
+        <activity
+            android:name=".FindPalettesActivity"
+            android:parentActivityName=".PalettesActivity" />
 
-        <activity android:name=".CreatePalettesActivity" />
+        <activity
+            android:name=".CreatePalettesActivity"
+            android:parentActivityName=".PalettesActivity" />
 
     </application>
 

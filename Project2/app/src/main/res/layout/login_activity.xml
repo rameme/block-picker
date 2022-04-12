@@ -6,35 +6,35 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/SignupTitle"
+        android:id="@+id/LoginTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="64dp"
         android:layout_marginEnd="16dp"
         android:text="@string/login_title"
-        android:textSize="24sp"
+        android:textSize="48sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/UsernameLogin"
+        android:id="@+id/EmailLogin"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="64dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="64dp"
         android:ems="10"
-        android:hint="@string/username_login"
+        android:hint="@string/email_login"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SignupTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/LoginTitle" />
 
     <EditText
-        android:id="@+id/PasswordSignup"
+        android:id="@+id/PasswordLogin"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="64dp"
@@ -45,10 +45,10 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/UsernameLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/EmailLogin" />
 
     <Button
-        android:id="@+id/Login"
+        android:id="@+id/LoginButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
@@ -57,7 +57,7 @@
         android:text="@string/login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PasswordSignup" />
+        app:layout_constraintTop_toBottomOf="@+id/PasswordLogin" />
 
     <Button
         android:id="@+id/Signup"
@@ -69,6 +69,6 @@
         android:text="@string/signup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Login" />
+        app:layout_constraintTop_toBottomOf="@+id/LoginButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

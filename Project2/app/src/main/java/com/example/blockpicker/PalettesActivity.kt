@@ -5,54 +5,116 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
 
 class PalettesActivity: AppCompatActivity() {
 
-    // init variables
+    // Init variables
     private lateinit var recyclerView : RecyclerView
+
+    // Firebase
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private lateinit var firebaseDatabase: FirebaseDatabase
+
+    // TODO: progress bar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.palettes_activity)
 
-        // log it
+        // Log it
         Log.d("PalettesActivity", "onCreate called!")
 
-        // set title
+        // Set title
         title = resources.getText(R.string.palettes_activity_title);
+
+        // Firebase
+        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        firebaseDatabase = FirebaseDatabase.getInstance()
 
         /* palettes recyclerView */
         recyclerView = findViewById(R.id.ResultView)
 
-        val palettes = getFakePalettes()
-        val adapter = PalettesAdapter(palettes)
-        recyclerView.adapter = adapter
+        // get data
+        getPalettesFromFirebase()
+    }
 
-        recyclerView.layoutManager = LinearLayoutManager(this)
+    /* getPalettesFromFirebase */
+    // Get palettes data from FirebaseDB
+    private fun getPalettesFromFirebase(){
+
+        // Get data from palettes tables
+        val reference = firebaseDatabase.getReference("palettes")
+        reference.addValueEventListener(object : ValueEventListener {
+
+            // Could not palettes information, show error and log it
+            override fun onCancelled(error: DatabaseError) {
+                firebaseAnalytics.logEvent("firebasedb_cancelled", null)
+                Toast.makeText(
+                    this@PalettesActivity,
+                    R.string.failed_to_retrieve_palettes,
+                    Toast.LENGTH_LONG
+                ).show()
+
+                Log.e("PalettesActivity", "DB connection issue", error.toException())
+                Firebase.crashlytics.recordException(error.toException())
+            }
+
+            // Found palettes data, show it in the recyclerView
+            override fun onDataChange(snapshot: DataSnapshot) {
+                firebaseAnalytics.logEvent("firebasedb_data_change", null)
+
+                val palettes = mutableListOf<Palettes>()
+                snapshot.children.forEach { childSnapshot: DataSnapshot ->
+                    try {
+                        val palette = childSnapshot.getValue(Palettes::class.java)
+                        if (palette != null) {
+                            palettes.add(palette)
+                        }
+                    } catch (exception: Exception) {
+                        Log.e("PalettesActivity", "Failed to read palettes", exception)
+                        Firebase.crashlytics.recordException(exception)
+                    }
+                }
+
+                val adapter = PalettesAdapter(palettes)
+                recyclerView.adapter = adapter
+                recyclerView.layoutManager = LinearLayoutManager(this@PalettesActivity)
+            }
+        })
     }
 
     /* Navigation Menu */
-    // create an action bar button
+    // Create an action bar button
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
-    // handle button activities
+    // Handle button activities
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            // go to profile activity
+            // Go to profile activity
             R.id.ProfileMenu -> {
                 Log.d("PalettesActivity", "Switch to ProfileActivity!")
                 val intent = Intent(this, ProfileActivity::class.java)
                 startActivity(intent)
             }
 
-            // go to create palettes activity
+            // Go to create palettes activity
             R.id.CreateMenu -> {
                 Log.d("PalettesActivity", "Switch to CreatePalettesActivity!")
                 val intent = Intent(this, CreatePalettesActivity::class.java)

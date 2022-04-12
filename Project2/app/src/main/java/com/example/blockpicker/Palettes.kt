@@ -1,13 +1,19 @@
 package com.example.blockpicker
 
+import java.io.Serializable
+
 data class Palettes(
     val name: String,
     val author: String,
+    val authorUID: String,
+    val minecraftUUID: String,
     val likes: Int,
-    val blockBitmap1: Int,
-    val blockBitmap2: Int,
-    val blockBitmap3: Int,
-    val blockBitmap4: Int,
-    val blockBitmap5: Int,
-    val blockBitmap6: Int
-)
+    val block1: String,
+    val block2: String,
+    val block3: String,
+    val block4: String,
+    val block5: String,
+    val block6: String
+) : Serializable {
+    constructor() : this("","","","",0,"","","","","","")
+}
