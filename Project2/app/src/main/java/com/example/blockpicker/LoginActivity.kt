@@ -8,8 +8,10 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.*
@@ -32,8 +34,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var password: EditText
     private lateinit var loginButton : Button
     private lateinit var signupButton : Button
-
-    // TODO: progress bar
+    private lateinit var progressBar : ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
         Log.d("LoginActivity", "onCreate called!")
 
         // SharedPreferences
-        val sharedPrefs: SharedPreferences = getSharedPreferences("block-picker", Context.MODE_PRIVATE)
+        val sharedPreferences: SharedPreferences = getSharedPreferences("block-picker", Context.MODE_PRIVATE)
 
         // Set title
         title = resources.getText(R.string.login_activity_title)
@@ -51,6 +52,7 @@ class LoginActivity : AppCompatActivity() {
         // Get UI elements
         email = findViewById(R.id.EmailLogin)
         password = findViewById(R.id.PasswordLogin)
+        progressBar = findViewById(R.id.progressBarLogin)
 
         // Firebase
         firebaseAuth = FirebaseAuth.getInstance()
@@ -62,7 +64,9 @@ class LoginActivity : AppCompatActivity() {
         loginButton.isEnabled = false
 
         // Login the user using FirebaseAuth and Store additional information to sharedPreferences
-        loginButton.setOnClickListener(){ view ->
+        loginButton.setOnClickListener(){
+
+            progressBar.visibility = View.VISIBLE
 
             val inputtedEmail: String = email.text.toString().trim()
             val inputtedPassword: String = password.text.toString().trim()
@@ -87,11 +91,11 @@ class LoginActivity : AppCompatActivity() {
                         firebaseAnalytics.logEvent("get_additional_account_info", null)
 
                         // Get Firebase UID to find account
-                        val UID: String = FirebaseAuth.getInstance().currentUser!!.uid!!
+                        val UID: String = FirebaseAuth.getInstance().currentUser!!.uid
                         val referenceAccounts = firebaseDatabase.getReference("accounts").child(UID)
 
                         // Search for Account
-                        referenceAccounts.addValueEventListener(object : ValueEventListener {
+                        referenceAccounts.addListenerForSingleValueEvent(object : ValueEventListener {
                             // Could not find account, show error and log it
                             override fun onCancelled(error: DatabaseError) {
                                 firebaseAnalytics.logEvent("firebasedb_cancelled", null)
@@ -116,24 +120,25 @@ class LoginActivity : AppCompatActivity() {
                                 }
 
                                 // Save account information to sharedPreferences
-                                sharedPrefs
+                                sharedPreferences
                                     .edit()
                                     .putString("USERNAME", account!!.username)
                                     .apply()
 
-                                sharedPrefs
+                                sharedPreferences
                                     .edit()
-                                    .putString("UUID", account!!.minecraft_UUID)
+                                    .putString("UUID", account!!.minecraftUUID)
                                     .apply()
 
                                 // Save the email to SharedPreferences
-                                sharedPrefs
+                                sharedPreferences
                                     .edit()
                                     .putString("EMAIL", inputtedEmail)
                                     .apply()
 
                                 // Go to PalettesActivity
                                 val intent = Intent(email.context, PalettesActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 startActivity(intent)
 
                                 // Prevent users backing into this activity
@@ -148,6 +153,9 @@ class LoginActivity : AppCompatActivity() {
                         if (exception != null) {
                             Firebase.crashlytics.recordException(exception)
                         }
+
+                        // Hide progress bar
+                        progressBar.visibility = View.GONE
 
                         // Show errors
                         when (exception) {
@@ -189,7 +197,7 @@ class LoginActivity : AppCompatActivity() {
 
         // Go to signup screen
         signupButton = findViewById(R.id.Signup)
-        signupButton.setOnClickListener(){ view ->
+        signupButton.setOnClickListener(){
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
         }
@@ -199,8 +207,22 @@ class LoginActivity : AppCompatActivity() {
         password.addTextChangedListener(textWatcher)
 
         // Restore saved username
-        val savedEmail = sharedPrefs.getString("EMAIL", "")
+        val savedEmail = sharedPreferences.getString("EMAIL", "")
         email.setText(savedEmail)
+
+        progressBar.visibility = View.GONE
+
+        // If they're logged in send them to palettes screen
+        if(firebaseAuth.currentUser != null){
+            // Go to PalettesActivity
+            val intent = Intent(email.context, PalettesActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+
+            // Prevent users backing into this activity
+            finish()
+        }
+
     }
 
     /* TextWatcher */

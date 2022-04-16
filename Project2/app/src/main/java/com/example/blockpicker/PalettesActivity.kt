@@ -18,6 +18,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 
+lateinit var paletteListener: ValueEventListener
+
 class PalettesActivity: AppCompatActivity() {
 
     // Init variables
@@ -38,7 +40,7 @@ class PalettesActivity: AppCompatActivity() {
         Log.d("PalettesActivity", "onCreate called!")
 
         // Set title
-        title = resources.getText(R.string.palettes_activity_title);
+        // title = resources.getText(R.string.palettes_activity_title);
 
         // Firebase
         firebaseAuth = FirebaseAuth.getInstance()
@@ -46,7 +48,7 @@ class PalettesActivity: AppCompatActivity() {
         firebaseDatabase = FirebaseDatabase.getInstance()
 
         /* palettes recyclerView */
-        recyclerView = findViewById(R.id.ResultView)
+        recyclerView = findViewById(R.id.PaletteView)
 
         // get data
         getPalettesFromFirebase()
@@ -57,8 +59,8 @@ class PalettesActivity: AppCompatActivity() {
     private fun getPalettesFromFirebase(){
 
         // Get data from palettes tables
-        val reference = firebaseDatabase.getReference("palettes")
-        reference.addValueEventListener(object : ValueEventListener {
+        val referencePalettes = firebaseDatabase.getReference("palettes").orderByChild("likes")
+        paletteListener = referencePalettes.addValueEventListener(object : ValueEventListener {
 
             // Could not palettes information, show error and log it
             override fun onCancelled(error: DatabaseError) {
@@ -80,9 +82,17 @@ class PalettesActivity: AppCompatActivity() {
                 val palettes = mutableListOf<Palettes>()
                 snapshot.children.forEach { childSnapshot: DataSnapshot ->
                     try {
+                        val UID = firebaseAuth.currentUser!!.uid
+
                         val palette = childSnapshot.getValue(Palettes::class.java)
+
                         if (palette != null) {
-                            palettes.add(palette)
+                            // check firebase for likes
+                            val keys = childSnapshot.child("saved").toString()
+                            if(UID in keys){
+                                palette.liked = true
+                            }
+                            palettes.add(0, palette)
                         }
                     } catch (exception: Exception) {
                         Log.e("PalettesActivity", "Failed to read palettes", exception)
@@ -95,20 +105,24 @@ class PalettesActivity: AppCompatActivity() {
                 recyclerView.layoutManager = LinearLayoutManager(this@PalettesActivity)
             }
         })
+
     }
 
     /* Navigation Menu */
     // Create an action bar button
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_person);
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         return super.onCreateOptionsMenu(menu)
     }
 
     // Handle button activities
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+
             // Go to profile activity
-            R.id.ProfileMenu -> {
+            android.R.id.home -> {
                 Log.d("PalettesActivity", "Switch to ProfileActivity!")
                 val intent = Intent(this, ProfileActivity::class.java)
                 startActivity(intent)
@@ -120,7 +134,22 @@ class PalettesActivity: AppCompatActivity() {
                 val intent = Intent(this, CreatePalettesActivity::class.java)
                 startActivity(intent)
             }
+
+            // Search
+            R.id.SearchMenu -> {
+                Log.d("PalettesActivity", "Switch to FindPalettesActivity!")
+                val intent = Intent(this, FindPalettesActivity::class.java)
+                startActivity(intent)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
+
+    /*
+    override fun onStop() {
+        // remove listener
+        firebaseDatabase.getReference("palettes").removeEventListener(paletteListener)
+        super.onStop()
+    }
+     */
 }

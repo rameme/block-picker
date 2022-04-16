@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -23,6 +24,15 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlin.collections.ArrayList
+import android.graphics.Canvas
+import android.graphics.Matrix
+import android.view.View
+import androidx.core.graphics.drawable.toBitmap
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.io.ByteArrayOutputStream
 
 class CreatePalettesActivity : AppCompatActivity() {
 
@@ -30,24 +40,25 @@ class CreatePalettesActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var firebaseStore: FirebaseStorage
 
-    // Init variables
+    // UI elements
     private lateinit var createBlock : ArrayList<ImageView>
-    private lateinit var currentBlock : ImageView
     private lateinit var paletteList : ArrayList<TextView>
+    private lateinit var currentBlock : ImageView
     private lateinit var paletteName : EditText
     private lateinit var createButton : Button
+    private lateinit var progressBar : ProgressBar
 
     // Store palette information
     private lateinit var blockName : Array<String>
     private var currentBlockIndex = 0
     private var currentPaletteSize = 0;
 
+    // Dialog
     private lateinit var block : TextView
     private lateinit var blockList : ArrayList<String>
     private lateinit var dialog : Dialog
-
-    // TODO: progress bar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,25 +68,26 @@ class CreatePalettesActivity : AppCompatActivity() {
         Log.d("CreatePalettesActivity", "onCreate called!")
 
         // Set title
-        title = resources.getText(R.string.create_palettes);
+        title = resources.getText(R.string.create_palettes)
 
         // SharedPreferences
-        val sharedPrefs: SharedPreferences = getSharedPreferences("block-picker", Context.MODE_PRIVATE)
+        val sharedPreferences: SharedPreferences = getSharedPreferences("block-picker", Context.MODE_PRIVATE)
 
         // Firebase
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         firebaseDatabase = FirebaseDatabase.getInstance()
+        firebaseStore = FirebaseStorage.getInstance()
 
         // Set value in array list
-        blockList = ArrayList<String>()
-        blockList = arrayListOf<String>(*resources.getStringArray(R.array.blocks))
+        blockList = arrayListOf(*resources.getStringArray(R.array.blocks))
 
         // Text View
         block = findViewById(R.id.SearchBlocks)
 
         /* Image View */
-        createBlock = ArrayList<ImageView>(6)
+        // Set up ImageView
+        createBlock = ArrayList(6)
         blockName = arrayOf("","","","","","")
 
         var imageViewId = arrayOf(R.id.CreateBlock1,R.id.CreateBlock2,R.id.CreateBlock3,R.id.CreateBlock4,R.id.CreateBlock5,R.id.CreateBlock6);
@@ -94,67 +106,165 @@ class CreatePalettesActivity : AppCompatActivity() {
         }
 
         /* TextView */
-        paletteList = ArrayList<TextView>(6)
+        // Set up TextView
+        paletteList = ArrayList(6)
         var paletteBlockId = arrayOf(R.id.PaletteBlock1,R.id.PaletteBlock2,R.id.PaletteBlock3,R.id.PaletteBlock4,R.id.PaletteBlock5,R.id.PaletteBlock6);
 
-        // Get ImageView by and TODO: set on click listeners to highlight block
+        // Get TextView and TODO: set on click listeners to highlight block
         for(i in paletteBlockId.indices){
             var createPaletteText : TextView = findViewById(paletteBlockId[i])
             paletteList.add(createPaletteText)
         }
 
+        // Progress bar
+        progressBar = findViewById(R.id.progressBarCreate)
+
         // PaletteName input
         paletteName = findViewById(R.id.NamePalette)
 
-        // Create palette
+        // Create palette, click on create button to upload palette
         createButton = findViewById(R.id.PaletteCreate)
         createButton.setOnClickListener(){
+
+            // Show progress bar and disable button
+            progressBar.visibility = View.VISIBLE
+            createButton.isEnabled = false
+
             firebaseAnalytics.logEvent("create_button_clicked", null)
 
+            // Get UID from firebaseAuth
             val UID: String = FirebaseAuth.getInstance().currentUser!!.uid!!
 
-            // Get paletteName
+            // Get paletteName, use hint name if no palette name is set
             var inputtedPaletteName = paletteName.text.toString().trim()
             if (inputtedPaletteName.isBlank()){
                 inputtedPaletteName = paletteName.hint.toString().trim()
             }
 
-            // Get author and minecraft UUID from sharedPrefs
-            val author = sharedPrefs.getString("USERNAME", "")
-            val minecraftUUID = sharedPrefs.getString("UUID", "")
+            // Get author and minecraft UUID from sharedPreferences
+            val author = sharedPreferences.getString("USERNAME", "")
+            val minecraftUUID = sharedPreferences.getString("UUID", "")
 
-            // Create palette object
-            val palette = Palettes(
-                name = inputtedPaletteName,
-                author = author!!,
-                authorUID = UID,
-                minecraftUUID = minecraftUUID!!,
-                likes = 0,
-                block1 = blockName[0].trim(),
-                block2 = blockName[1].trim(),
-                block3 = blockName[2].trim(),
-                block4 = blockName[3].trim(),
-                block5 = blockName[4].trim(),
-                block6 = blockName[5].trim()
-            )
-
-            // Store palette on Firebase
+            // Get Firebase DB reference and key
             val referencePalettes = firebaseDatabase.getReference("palettes")
-            referencePalettes.push().setValue(palette)
+            val key = referencePalettes.push().key;
 
-            // Go to PalettesActivity
-            val intent = Intent(createButton.context, PalettesActivity::class.java)
-            startActivity(intent)
 
-            // Prevent user from backing into the palettes screen
-            finish()
+            /* combine bitmap and upload to firebase */
+            // combine bitmap to create a palette bitmap of 6 images
+            val combined = paletteBitmap()
+
+            // Image ref and storage location
+            val storageReference = FirebaseStorage.getInstance().reference
+            val paletteRef: StorageReference = storageReference.child("palette/$key.jpg")
+
+            // Get the data image bitmap as bytes
+            val imageBAOS = ByteArrayOutputStream()
+            combined!!.compress(Bitmap.CompressFormat.PNG, 100, imageBAOS)
+            val data: ByteArray = imageBAOS.toByteArray()
+
+            /* Firebase Storage */
+            // Upload to palette bitmap Firebase storage
+            val uploadData = paletteRef.putBytes(data)
+
+            uploadData.addOnSuccessListener { task ->
+
+                // Get the Url of the block palette
+                task.metadata!!.reference!!.downloadUrl.addOnCompleteListener { uri ->
+
+                    if(uri.isSuccessful){
+
+                        /* Upload palette information to Firebase DB */
+                        // Get palette image url
+                        val paletteUrl = uri.result!!.toString()
+
+                        // Create blocks Hashmap
+                        val blocks = HashMap<String, Boolean>()
+                        for (block in blockName) {
+                            blocks[block] = true
+                        }
+
+                        // Create palette object
+                        val palette = Palettes(
+                            paletteID = key!!,
+                            name = inputtedPaletteName,
+                            author = author!!,
+                            authorUID = UID,
+                            minecraftUUID = minecraftUUID!!,
+                            likes = 0,
+                            liked = false,
+                            paletteUrl = paletteUrl,
+                            block1 = blockName[0],
+                            block2 = blockName[1],
+                            block3 = blockName[2],
+                            block4 = blockName[3],
+                            block5 = blockName[4],
+                            block6 = blockName[5],
+                            blocks = blocks,
+                        )
+
+                        // Store palette data on Firebase
+                        referencePalettes.child(key).setValue(palette).addOnCompleteListener {
+                            if(it.isSuccessful){
+                                // Successfully added accounts
+                                Toast.makeText(this, R.string.palette_success, Toast.LENGTH_LONG).show()
+
+                                // Go to PalettesActivity
+                                val intent = Intent(createButton.context, PalettesActivity::class.java)
+                                startActivity(intent)
+
+                                // Prevent user from backing into the palettes screen
+                                finish()
+                            } else {
+                                val exception = it.exception
+
+                                // Log the error to crashlytics
+                                if (exception != null) {
+                                    Firebase.crashlytics.recordException(exception)
+                                }
+
+                                // Log the error to firebaseAnalytics
+                                val bundle = Bundle()
+                                bundle.putString("reason", "generic")
+                                firebaseAnalytics.logEvent("palette_create_failed", bundle)
+
+                                // Show error
+                                Toast.makeText(this, R.string.palette_failure, Toast.LENGTH_LONG).show()
+
+                                // Disable and Enable button on error
+                                progressBar.visibility = View.GONE
+                                createButton.isEnabled = true
+                            }
+                        }
+                    }
+                }
+            }
+
+            uploadData.addOnCanceledListener {
+
+                // Log the error to firebaseAnalytics
+                val bundle = Bundle()
+                bundle.putString("reason", "generic")
+                firebaseAnalytics.logEvent("palette_image_upload_failed", bundle)
+
+                // Show error
+                Toast.makeText(this, R.string.palette_failure, Toast.LENGTH_LONG).show()
+
+                // Disable and Enable button on error
+                progressBar.visibility = View.GONE
+                createButton.isEnabled = true
+
+            }
 
         }
+
+        progressBar.visibility = View.GONE
 
         // Disable the create button
         createButton.isEnabled = false
     }
 
+    /* Show block select menu (dialog), update the palette on screen, and store palette information */
     private fun selectBlock (){
         // Initialize dialog
         val builder = AlertDialog.Builder(this@CreatePalettesActivity)
@@ -186,24 +296,24 @@ class CreatePalettesActivity : AppCompatActivity() {
         })
 
         // Click on the desired block name to set the image bitmap
-        listBlocks.onItemClickListener = OnItemClickListener { parent, view, position, id -> // when item selected from list
-            // Set selected item on textView
+        listBlocks.onItemClickListener = OnItemClickListener { parent, view, position, id ->
+            // Block selected
             var blockSelected = parent.getItemAtPosition(position) as String
 
-            // Increase palette size if the imageView was empty
+            // Increase palette size if the imageView previously empty
             if(blockName[currentBlockIndex].isEmpty()){
                 currentPaletteSize += 1
             }
 
             // Set the block name
-            blockName[currentBlockIndex] = "$blockSelected\n"
+            blockName[currentBlockIndex] = "$blockSelected"
 
-            // If first block is changed change palette hint
+            // If the first block is changed change palette hint
             if(currentBlockIndex == 0){
                 paletteName.hint = "$blockSelected Palette"
             }
 
-            // Change text to current block
+            // Change text to new block
             paletteList[currentBlockIndex].text = blockName[currentBlockIndex]
 
             // Get the drawable ID from block name
@@ -229,23 +339,78 @@ class CreatePalettesActivity : AppCompatActivity() {
         }
     }
 
+    /* Combine 6 Bitmaps to create block palette*/
+    private fun paletteBitmap() : Bitmap?{
+        var left : Bitmap?
+        var right: Bitmap?
+
+        /* Combine top part of the palette */
+        // Combine 0 + 1 -> top -> top + 2
+        left = createBlock[0].drawable.toBitmap()
+        right = createBlock[1].drawable.toBitmap()
+        var topLeftHalf = combineHorizontal(left,right)
+
+        right = createBlock[2].drawable.toBitmap()
+        val top = combineHorizontal(topLeftHalf!!,right)
+
+        /* Combine bottom part of the palette */
+        // combine 3 + 4 -> bottom -> bottom + 5
+        left = createBlock[3].drawable.toBitmap()
+        right = createBlock[4].drawable.toBitmap()
+        var bottomLeftHalf = combineHorizontal(left,right)
+
+        right = createBlock[5].drawable.toBitmap()
+        val bottom = combineHorizontal(bottomLeftHalf!!,right)
+
+        return combineVertical(top!!, bottom!!)
+    }
+
+    /* Combine two Android Bitmaps top and bottom. */
+    private fun combineVertical(top : Bitmap, bottom : Bitmap): Bitmap? {
+        // Get the size of the images combined side by side.
+        val width: Int = top.width
+        val height: Int = top.height + bottom.height
+
+        // Create a Bitmap large enough to hold both input images and a canvas to draw to this combined bitmap.
+        val combined = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(combined)
+
+        // Render both input images into the combined bitmap and return it.
+        canvas.drawBitmap(top, Matrix(),  null)
+        canvas.drawBitmap(bottom, 0f, bottom.height.toFloat(), null)
+
+        return combined
+    }
+
+    /* Combine two Android Bitmaps side by side. */
+    /* Credits: https://gist.github.com/miky-kr5/d4a14246f25adbc71637 */
+    private fun combineHorizontal(left : Bitmap, right : Bitmap): Bitmap? {
+
+        // Get the size of the images combined side by side.
+        val width: Int = left.width + right.width
+        val height: Int = if (left.height > right.height) { left.height } else { right.height }
+
+        // Create a Bitmap large enough to hold both input images and a canvas to draw to this combined bitmap.
+        val combined = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(combined)
+
+        // Render both input images into the combined bitmap and return it.
+        canvas.drawBitmap(left, 0f, 0f, null)
+        canvas.drawBitmap(right, left.width.toFloat(), 0f, null)
+
+        return combined
+    }
+
     /* Close Create Palettes Menu */
     // Create an action bar button
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.close, menu)
+        menuInflater.inflate(R.menu.defult, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     // Handle button activities
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // go to palettes activity
-        when (item.itemId) {
-            R.id.CloseMenu -> {
-                Log.d("CreatePalettesActivity", "Switch to PalettesActivity!")
-                val intent = Intent(this, PalettesActivity::class.java)
-                startActivity(intent)
-            }
-        }
+        // go back to activity
         return super.onOptionsItemSelected(item)
     }
 }

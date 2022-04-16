@@ -8,14 +8,17 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.*
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import org.jetbrains.anko.doAsync
 import java.lang.Exception
 
@@ -25,6 +28,7 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var firebaseStore: FirebaseStorage
 
     // UI elements
     private lateinit var email: EditText
@@ -33,8 +37,7 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var verifyPassword: EditText
     private lateinit var minecraftUsername: EditText
     private lateinit var signUpButton: Button
-
-    // TODO: progress bar
+    private lateinit var progressBar : ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +56,7 @@ class SignupActivity : AppCompatActivity() {
         verifyPassword = findViewById(R.id.PasswordVerifySignup)
         minecraftUsername = findViewById(R.id.McUsernameSignup)
         signUpButton = findViewById(R.id.SignupButton)
+        progressBar = findViewById(R.id.progressBarSignup)
 
         // Disable signup button by default
         signUpButton.isEnabled = false
@@ -61,9 +65,12 @@ class SignupActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         firebaseDatabase = FirebaseDatabase.getInstance()
+        firebaseStore = FirebaseStorage.getInstance()
 
         // Create account
         signUpButton.setOnClickListener {
+            // show progress bar when creating account
+            progressBar.visibility = View.VISIBLE
             createAccount()
         }
 
@@ -73,6 +80,9 @@ class SignupActivity : AppCompatActivity() {
         verifyPassword.addTextChangedListener(textWatcher)
         password.addTextChangedListener(textWatcher)
         minecraftUsername.addTextChangedListener(textWatcher)
+
+        // Hide progress bar
+        progressBar.visibility = View.INVISIBLE
     }
 
     /* createAccount */
@@ -85,23 +95,28 @@ class SignupActivity : AppCompatActivity() {
 
         // Get profile manager
         val profileManager = SignupManager()
-
         Log.e("SignupActivity", "Retrieving UUID")
 
         // Networking on a background thread
         doAsync {
 
             // Use the Mojang API to retrieve minecraft UUID
-            var UUID: String = try {
-                profileManager.retrieveUUID(inputtedMinecraftUsername)
+            var UUID: String = ""
+            try {
+                UUID = profileManager.retrieveUUID(inputtedMinecraftUsername)
             } catch (exception: Exception) {
                 // Could not find username, log it
                 Log.e("SignupActivity", "Retrieving UUID failed", exception)
+
+                // hide progress bar
+                progressBar.visibility = View.GONE
             }.toString()
 
             runOnUiThread {
+
                 // If a valid UUID is returned, create an account
-                if(UUID != null){
+                if(UUID.isNotBlank()){
+
                     val inputtedEmail: String = email.text.toString().trim()
                     val inputtedPassword: String = password.text.toString().trim()
                     val inputtedUsername: String = username.text.toString().trim()
@@ -119,9 +134,9 @@ class SignupActivity : AppCompatActivity() {
                                 // Store username, minecraft username, and minecraft UUID to FirebaseRealTime Database
                                 val reference = firebaseDatabase.getReference("accounts")
                                 val UID = user!!.uid
-                                val account = Accounts(inputtedUsername, inputtedMinecraftUsername, UUID)
 
-                                // Update data on DB
+                                // Update data to DB
+                                val account = Accounts(inputtedUsername, inputtedMinecraftUsername, UUID)
                                 reference.child(UID).push().setValue(account).addOnCompleteListener{
                                     if(it.isSuccessful){
                                         // Successfully added accounts
@@ -148,6 +163,7 @@ class SignupActivity : AppCompatActivity() {
 
                                         // Go to PalettesActivity
                                         val intent = Intent(context, PalettesActivity::class.java)
+                                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                         startActivity(intent)
 
                                         // Prevent user from backing into signup screen
@@ -192,12 +208,12 @@ class SignupActivity : AppCompatActivity() {
                                     }
                                     // Generic error: show toast
                                     else -> {
-                                        // log the error to firebaseAnalytics
+                                        // Log the error to firebaseAnalytics
                                         val bundle = Bundle()
                                         bundle.putString("reason", "generic")
                                         firebaseAnalytics.logEvent("signup_failed", bundle)
 
-                                        // display error
+                                        // Display error
                                         Toast.makeText(
                                             context,
                                             getString(R.string.signup_failure_generic, exception),
@@ -210,13 +226,16 @@ class SignupActivity : AppCompatActivity() {
                 }
                 // No minecraft account found, show error
                 else {
+                    // hide progress bar
+                    progressBar.visibility = View.GONE
+
                     // Log the error to firebaseAnalytics
                     val bundle = Bundle()
                     bundle.putString("reason", "invalid-uuid")
                     firebaseAnalytics.logEvent("signup_failed", bundle)
-
                     minecraftUsername.error = getString(R.string.signup_failure_invalid_mc_username)
                 }
+
             }
         }
     }

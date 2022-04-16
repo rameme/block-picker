@@ -20,7 +20,7 @@ class SignupManager {
         okHttpClient = builder.build()
     }
 
-    fun retrieveUUID(username: String) : String? {
+    fun retrieveUUID(username: String) : String {
 
         // Get minecraft UUID
         val requestUUID: Request = Request.Builder()
@@ -42,6 +42,6 @@ class SignupManager {
         }
 
         // Return null
-        return null
+        return ""
     }
 }

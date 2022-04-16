@@ -2,10 +2,11 @@ package com.example.blockpicker
 
 import java.io.Serializable
 
+// Account Dataclass
 data class Accounts(
     val username: String,
-    val minecraft_username: String,
-    val minecraft_UUID: String,
+    val minecraftUsername: String,
+    val minecraftUUID: String,
 ) : Serializable {
     constructor() : this("","","")
 }
