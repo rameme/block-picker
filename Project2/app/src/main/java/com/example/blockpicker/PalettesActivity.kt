@@ -144,12 +144,4 @@ class PalettesActivity: AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    /*
-    override fun onStop() {
-        // remove listener
-        firebaseDatabase.getReference("palettes").removeEventListener(paletteListener)
-        super.onStop()
-    }
-     */
 }

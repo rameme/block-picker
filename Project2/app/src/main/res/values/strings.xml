@@ -70,8 +70,8 @@
     <string name="palette_failure">Palette uploaded failed! Try again!</string>
 
     <!-- Find Palettes -->
-    <string name="find_title">Search by blocks</string>
-    <string name="find_result">Results</string>
+    <string name="find_result">Search by blocks</string>
+    <string name="find_title">Results</string>
     <string name="find_result_general">No results</string>
     <string name="find_result_fail">No results for %1$s</string>
     <string name="find_result_block">Found results for %1$s</string>

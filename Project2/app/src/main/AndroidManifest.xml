@@ -30,6 +30,10 @@
             android:label="" />
 
         <activity
+            android:name=".PalettesDetailActivity"
+            android:label="" />
+
+        <activity
             android:name=".ProfileActivity"
             android:parentActivityName=".PalettesActivity" />
 

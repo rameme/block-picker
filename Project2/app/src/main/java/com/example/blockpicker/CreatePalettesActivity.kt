@@ -27,6 +27,7 @@ import kotlin.collections.ArrayList
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.view.View
+import androidx.cardview.widget.CardView
 import androidx.core.graphics.drawable.toBitmap
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
@@ -46,6 +47,8 @@ class CreatePalettesActivity : AppCompatActivity() {
     private lateinit var createBlock : ArrayList<ImageView>
     private lateinit var paletteList : ArrayList<TextView>
     private lateinit var currentBlock : ImageView
+    private lateinit var currentBlockIcon : ImageView
+    private lateinit var currentCardIcon : CardView
     private lateinit var paletteName : EditText
     private lateinit var createButton : Button
     private lateinit var progressBar : ProgressBar
@@ -90,15 +93,23 @@ class CreatePalettesActivity : AppCompatActivity() {
         createBlock = ArrayList(6)
         blockName = arrayOf("","","","","","")
 
-        var imageViewId = arrayOf(R.id.CreateBlock1,R.id.CreateBlock2,R.id.CreateBlock3,R.id.CreateBlock4,R.id.CreateBlock5,R.id.CreateBlock6);
+        var imageViewId = arrayOf(R.id.Block1,R.id.Block2,R.id.Block3,R.id.Block4,R.id.Block5,R.id.Block6);
+        var imageIconId = arrayOf(R.id.BlockIcon1,R.id.BlockIcon2,R.id.BlockIcon3,R.id.BlockIcon4,R.id.BlockIcon5,R.id.BlockIcon6)
+        var cardIconId = arrayOf(R.id.CardIcon1,R.id.CardIcon2,R.id.CardIcon3,R.id.CardIcon4,R.id.CardIcon5,R.id.CardIcon6)
+
 
         // Get ImageView by ID and set OnClickListeners
         for(i in imageViewId.indices){
             var createBlockView : ImageView = findViewById(imageViewId[i])
+            var createBlockIcon : ImageView = findViewById(imageIconId[i])
+            var cardBlockIcon : CardView = findViewById(cardIconId[i])
+            cardBlockIcon.visibility = View.INVISIBLE
 
             // OnClickListeners for the image views
             createBlockView.setOnClickListener() {
                 currentBlock = createBlockView
+                currentBlockIcon = createBlockIcon
+                currentCardIcon = cardBlockIcon
                 currentBlockIndex = i
                 selectBlock()
             }
@@ -110,7 +121,7 @@ class CreatePalettesActivity : AppCompatActivity() {
         paletteList = ArrayList(6)
         var paletteBlockId = arrayOf(R.id.PaletteBlock1,R.id.PaletteBlock2,R.id.PaletteBlock3,R.id.PaletteBlock4,R.id.PaletteBlock5,R.id.PaletteBlock6);
 
-        // Get TextView and TODO: set on click listeners to highlight block
+        // Get TextView
         for(i in paletteBlockId.indices){
             var createPaletteText : TextView = findViewById(paletteBlockId[i])
             paletteList.add(createPaletteText)
@@ -191,7 +202,7 @@ class CreatePalettesActivity : AppCompatActivity() {
                             author = author!!,
                             authorUID = UID,
                             minecraftUUID = minecraftUUID!!,
-                            likes = 0,
+                            likes = 1,
                             liked = false,
                             paletteUrl = paletteUrl,
                             block1 = blockName[0],
@@ -323,6 +334,13 @@ class CreatePalettesActivity : AppCompatActivity() {
                 packageName
             )
 
+            // Load icon
+            currentCardIcon.visibility = View.VISIBLE
+            Picasso
+                .get()
+                .load(resId)
+                .into(currentBlockIcon)
+
             // Load image
             Picasso
                 .get()
@@ -404,13 +422,20 @@ class CreatePalettesActivity : AppCompatActivity() {
     /* Close Create Palettes Menu */
     // Create an action bar button
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.defult, menu)
+        menuInflater.inflate(R.menu.close, menu)
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
         return super.onCreateOptionsMenu(menu)
     }
 
     // Handle button activities
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // go back to activity
+        // go to palettes activity
+        when (item.itemId) {
+            R.id.CloseMenu -> {
+                // search block
+                onBackPressed()
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
 }

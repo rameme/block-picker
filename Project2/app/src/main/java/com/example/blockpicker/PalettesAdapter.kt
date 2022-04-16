@@ -1,6 +1,7 @@
 package com.example.blockpicker
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
@@ -15,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ServerValue
 import com.squareup.picasso.Picasso
 import androidx.core.app.ShareCompat
+import androidx.core.content.ContextCompat.startActivity
 
 class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<PalettesAdapter.ViewHolder>(){
 
@@ -41,6 +44,8 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
         val paletteSaved: TextView = rootLayout.findViewById(R.id.PaletteSaved)
         val paletteSavedButton: ImageButton = rootLayout.findViewById(R.id.PaletteSavedButton)
         val paletteShareButton: ImageButton = rootLayout.findViewById(R.id.PaletteShareButton)
+
+        val paletteCardView : CardView = rootLayout.findViewById(R.id.PaletteCardView)
     }
 
     //  Create new rows
@@ -55,6 +60,13 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentPalettes = palettes[position]
         val context = holder.blockBitmap1.context
+
+        // On click listener
+        holder.paletteCardView.setOnClickListener(){
+            val intent = Intent(holder.paletteCardView.context, PalettesDetailActivity::class.java)
+            intent.putExtra("PALETTE", currentPalettes)
+            startActivity(context, intent, null)
+        }
 
         // Load blocks from local storage
         Picasso
@@ -97,7 +109,6 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
         }
 
         // Show player Avatar
-        // TODO: enable firebase cache-ing
         Picasso
             .get()
             .load("https://crafatar.com/avatars/${currentPalettes.minecraftUUID}")

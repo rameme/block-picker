@@ -263,14 +263,20 @@ class ProfileActivity : AppCompatActivity() {
     /* Close Create Palettes Menu */
     // Create an action bar button
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.defult, menu)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        menuInflater.inflate(R.menu.close, menu)
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
         return super.onCreateOptionsMenu(menu)
     }
 
     // Handle button activities
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // go back to activity
+        // go to palettes activity
+        when (item.itemId) {
+            R.id.CloseMenu -> {
+                // search block
+                onBackPressed()
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
 }

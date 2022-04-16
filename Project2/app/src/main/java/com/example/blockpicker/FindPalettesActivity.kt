@@ -15,12 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
-import org.jetbrains.anko.find
+import android.widget.Toast
+import com.google.firebase.database.*
 
 class FindPalettesActivity : AppCompatActivity() {
 
@@ -31,8 +28,8 @@ class FindPalettesActivity : AppCompatActivity() {
 
     // UI elements
     private lateinit var resultText : TextView
+    private lateinit var searchBlockText : EditText
     private lateinit var recyclerView : RecyclerView
-
 
     // Dialog
     private lateinit var blockList : ArrayList<String>
@@ -46,7 +43,7 @@ class FindPalettesActivity : AppCompatActivity() {
         Log.d("Find Palettes Activity", "onCreate called!")
 
         // Set title
-        // title = resources.getText(R.string.find_title)
+        title = resources.getText(R.string.find_title)
 
         // Firebase
         firebaseAuth = FirebaseAuth.getInstance()
@@ -61,9 +58,13 @@ class FindPalettesActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.ResultView)
 
         resultText = findViewById(R.id.ResultText)
+        searchBlockText = findViewById(R.id.SearchBlockFind)
+        searchBlockText.isFocusable = false
 
         // search block
-        searchBlock()
+        searchBlockText.setOnClickListener(){
+            searchBlock()
+        }
 
         resultText.text = getString(R.string.find_result_general)
     }
@@ -78,7 +79,7 @@ class FindPalettesActivity : AppCompatActivity() {
         dialog = builder.create()
         dialog.show()
 
-        // Set dialog title
+        // Set dialog
         var dialogTitle: TextView = dialog.findViewById(R.id.SearchBlockTitle)
         dialogTitle.text = getString(R.string.select_block_to_search)
 
@@ -107,78 +108,93 @@ class FindPalettesActivity : AppCompatActivity() {
 
         // Click on the desired block name and search for it
         listBlocks.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-
             // Block selected
             var blockSelected = parent.getItemAtPosition(position) as String
 
             // Search by block
-            val referencePalettes = firebaseDatabase.getReference("palettes").orderByChild("blocks/$blockSelected").equalTo(true)
-            referencePalettes.addListenerForSingleValueEvent(object : ValueEventListener {
-
-                // Could not palettes information, show error and log it
-                override fun onCancelled(error: DatabaseError) {
-                    firebaseAnalytics.logEvent("firebasedb_cancelled", null)
-                    Toast.makeText(
-                        this@FindPalettesActivity,
-                        R.string.failed_to_retrieve_palettes,
-                        Toast.LENGTH_LONG
-                    ).show()
-
-                    resultText.text = getString(R.string.find_result_fail, blockSelected)
-
-                    Log.e("FindPalettesActivity", "DB connection issue", error.toException())
-                    Firebase.crashlytics.recordException(error.toException())
-                }
-
-                // Found palettes data, show it in the recyclerView
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    firebaseAnalytics.logEvent("firebasedb_data_change", null)
-
-                    resultText.text = getString(R.string.find_result_block, blockSelected)
-
-                    // Get the data and display it
-                    val palettes = mutableListOf<Palettes>()
-                    snapshot.children.forEach { childSnapshot: DataSnapshot ->
-                        try {
-                            val UID = firebaseAuth.currentUser!!.uid
-
-                            val palette = childSnapshot.getValue(Palettes::class.java)
-
-                            if (palette != null) {
-                                // check firebase for likes
-                                val keys = childSnapshot.child("saved").toString()
-                                if(UID in keys){
-                                    palette.liked = true
-                                }
-                                palettes.add(0, palette)
-                            }
-                        } catch (exception: Exception) {
-                            Log.e("PalettesActivity", "Failed to read palettes", exception)
-                            Firebase.crashlytics.recordException(exception)
-                        }
-                    }
-
-                    if(palettes.isNotEmpty()){
-                        resultText.text = getString(R.string.find_result_block, blockSelected)
-                    } else {
-                        resultText.text = getString(R.string.find_result_fail, blockSelected)
-                    }
-
-                    val adapter = PalettesAdapter(palettes)
-                    recyclerView.adapter = adapter
-                    recyclerView.layoutManager = LinearLayoutManager(this@FindPalettesActivity)
-                }
-            })
+            if (blockSelected.isNotBlank()){
+                searchFirebase(blockSelected)
+            } else {
+                searchBlockText.setText(getString(R.string.find_result))
+            }
 
             // Dismiss dialog
             dialog.dismiss()
         }
     }
 
+    /* Search firebase */
+    private fun searchFirebase(blockSelected : String){
+        val referencePalettes : Query = firebaseDatabase.getReference("palettes").orderByChild("blocks/$blockSelected").equalTo(true)
+
+        referencePalettes.addListenerForSingleValueEvent(object : ValueEventListener {
+
+            // Could not palettes information, show error and log it
+            override fun onCancelled(error: DatabaseError) {
+                firebaseAnalytics.logEvent("firebasedb_cancelled", null)
+                Toast.makeText(
+                    this@FindPalettesActivity,
+                    R.string.failed_to_retrieve_palettes,
+                    Toast.LENGTH_LONG
+                ).show()
+
+                resultText.text = getString(R.string.find_result_fail, blockSelected)
+                searchBlockText.setText(getString(R.string.find_result))
+
+                Log.e("FindPalettesActivity", "DB connection issue", error.toException())
+                Firebase.crashlytics.recordException(error.toException())
+            }
+
+            // Found palettes data, show it in the recyclerView
+            override fun onDataChange(snapshot: DataSnapshot) {
+                firebaseAnalytics.logEvent("firebasedb_data_change", null)
+
+                searchBlockText.setText(blockSelected)
+                resultText.text = getString(R.string.find_result_block, blockSelected)
+
+                // Get the data and display it
+                val palettes = mutableListOf<Palettes>()
+                snapshot.children.forEach { childSnapshot: DataSnapshot ->
+                    try {
+                        val UID = firebaseAuth.currentUser!!.uid
+
+                        val palette = childSnapshot.getValue(Palettes::class.java)
+
+                        if (palette != null && palette.blocks!!.containsKey(blockSelected)) {
+                            // check firebase for likes
+                            val keys = childSnapshot.child("saved").toString()
+                            if(UID in keys){
+                                palette.liked = true
+                            }
+                            palettes.add(0, palette)
+                        }
+                    } catch (exception: Exception) {
+                        Log.e("PalettesActivity", "Failed to read palettes", exception)
+                        Firebase.crashlytics.recordException(exception)
+                    }
+                }
+
+                // Set text
+                if(palettes.isNotEmpty()){
+                    resultText.text = getString(R.string.find_result_block, blockSelected)
+                } else {
+                    resultText.text = getString(R.string.find_result_fail, blockSelected)
+                }
+
+                val adapter = PalettesAdapter(palettes)
+                recyclerView.adapter = adapter
+                recyclerView.layoutManager = LinearLayoutManager(this@FindPalettesActivity)
+
+                Log.e("FindPalettesActivity", "Loading more data 0")
+            }
+        })
+    }
+
     /* Close Create Palettes Menu */
     // Create an action bar button
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.search, menu)
+        menuInflater.inflate(R.menu.close, menu)
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -186,9 +202,9 @@ class FindPalettesActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // go to palettes activity
         when (item.itemId) {
-            R.id.SearchButton -> {
+            R.id.CloseMenu -> {
                 // search block
-                searchBlock()
+                onBackPressed()
             }
         }
         return super.onOptionsItemSelected(item)
