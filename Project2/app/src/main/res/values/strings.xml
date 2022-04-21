@@ -59,7 +59,7 @@
     <!-- Create Palettes Activity -->
     <string name="create_palettes">Create Block Palette</string>
     <string name="name_palette">Palette Name:</string>
-    <string name="palette_blocks_title">Blocks Used:</string>
+    <string name="palette_blocks_title">Blocks Used</string>
     <string name="palette_create">Create Palette</string>
 
     <string name="select_block">Clicked on block</string>
