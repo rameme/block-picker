@@ -20,12 +20,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
             <ImageView
-                android:id="@+id/CreateBlock1"
+                android:id="@+id/Block1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
@@ -38,31 +42,31 @@
                 app:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
 
             <ImageView
-                android:id="@+id/CreateBlock2"
+                android:id="@+id/Block2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                app:layout_constraintStart_toEndOf="@+id/CreateBlock1"
+                app:layout_constraintStart_toEndOf="@+id/Block1"
                 app:layout_constraintTop_toBottomOf="@+id/SearchBlocks"
                 app:layout_constraintWidth_percent="0.3333"
                 app:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
 
             <ImageView
-                android:id="@+id/CreateBlock3"
+                android:id="@+id/Block3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                app:layout_constraintStart_toEndOf="@+id/CreateBlock2"
+                app:layout_constraintStart_toEndOf="@+id/Block2"
                 app:layout_constraintTop_toBottomOf="@+id/SearchBlocks"
                 app:layout_constraintWidth_percent="0.3333"
                 app:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
 
             <ImageView
-                android:id="@+id/CreateBlock4"
+                android:id="@+id/Block4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
@@ -70,31 +74,31 @@
 
 
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/CreateBlock1"
+                app:layout_constraintTop_toBottomOf="@+id/Block1"
                 app:layout_constraintWidth_percent="0.3333"
                 app:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
 
             <ImageView
-                android:id="@+id/CreateBlock5"
+                android:id="@+id/Block5"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
 
-                app:layout_constraintStart_toEndOf="@+id/CreateBlock4"
-                app:layout_constraintTop_toBottomOf="@+id/CreateBlock2"
+                app:layout_constraintStart_toEndOf="@+id/Block4"
+                app:layout_constraintTop_toBottomOf="@+id/Block2"
                 app:layout_constraintWidth_percent="0.3333"
                 app:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
 
             <ImageView
-                android:id="@+id/CreateBlock6"
+                android:id="@+id/Block6"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
 
-                app:layout_constraintStart_toEndOf="@+id/CreateBlock5"
-                app:layout_constraintTop_toBottomOf="@+id/CreateBlock3"
+                app:layout_constraintStart_toEndOf="@+id/Block5"
+                app:layout_constraintTop_toBottomOf="@+id/Block3"
                 app:layout_constraintWidth_percent="0.3333"
                 app:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
 
@@ -110,25 +114,21 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/CreateBlock4" />
+                app:layout_constraintTop_toBottomOf="@+id/Block4" />
 
-            <com.google.android.material.textfield.TextInputLayout
+            <EditText
                 android:id="@+id/NamePalette"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:ems="10"
+                android:hint="@string/hint"
+                android:inputType="textPersonName"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/NamePaletteTitle">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/NamePaletteInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint" />
-            </com.google.android.material.textfield.TextInputLayout>
+                app:layout_constraintTop_toBottomOf="@+id/NamePaletteTitle" />
 
             <TextView
                 android:id="@+id/PaletteBlocksTitle"
@@ -149,13 +149,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:lines="1"
                 android:maxLines="1"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/CardIcon1"
                 app:layout_constraintTop_toBottomOf="@+id/PaletteBlocksTitle" />
 
             <TextView
@@ -163,12 +163,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
                 android:lines="1"
                 android:maxLines="1"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/CardIcon2"
                 app:layout_constraintTop_toBottomOf="@+id/PaletteBlock1" />
 
             <TextView
@@ -176,12 +177,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
                 android:lines="1"
                 android:maxLines="1"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/CardIcon3"
                 app:layout_constraintTop_toBottomOf="@+id/PaletteBlock2" />
 
             <TextView
@@ -189,12 +191,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
                 android:lines="1"
                 android:maxLines="1"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/CardIcon4"
                 app:layout_constraintTop_toBottomOf="@+id/PaletteBlock3" />
 
             <TextView
@@ -202,12 +205,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
                 android:lines="1"
                 android:maxLines="1"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/CardIcon5"
                 app:layout_constraintTop_toBottomOf="@+id/PaletteBlock4" />
 
             <TextView
@@ -215,35 +219,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
                 android:lines="1"
                 android:maxLines="1"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/CardIcon6"
                 app:layout_constraintTop_toBottomOf="@+id/PaletteBlock5" />
-
-            <Button
-                android:id="@+id/PaletteCreate"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="16dp"
-                android:text="@string/palette_create"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <Spinner
-                android:id="@+id/SelectBlock"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="#00FFFFFF"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/SearchBlocks"
@@ -255,7 +238,131 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <Button
+                android:id="@+id/PaletteCreate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/palette_create"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/PaletteBlock6" />
+
+            <ProgressBar
+                android:id="@+id/progressBarCreate"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/CardIcon1"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="2dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/PaletteBlocksTitle">
+
+                <ImageView
+                    android:id="@+id/BlockIcon1"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    tools:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/CardIcon2"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/CardIcon1">
+
+                <ImageView
+                    android:id="@+id/BlockIcon2"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    tools:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/CardIcon3"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/CardIcon2">
+
+                <ImageView
+                    android:id="@+id/BlockIcon3"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    tools:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/CardIcon4"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/CardIcon3">
+
+                <ImageView
+                    android:id="@+id/BlockIcon4"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    tools:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/CardIcon5"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/CardIcon4">
+
+                <ImageView
+                    android:id="@+id/BlockIcon5"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    tools:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/CardIcon6"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/CardIcon5">
+
+                <ImageView
+                    android:id="@+id/BlockIcon6"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    tools:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
+            </androidx.cardview.widget.CardView>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

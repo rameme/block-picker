@@ -6,13 +6,13 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
 
-class ProfileManager {
+class SignupManager {
     private val okHttpClient: OkHttpClient
 
     init {
         val builder = OkHttpClient.Builder()
 
-        // This will cause all network traffic to be logged to the console for easy debugging
+        // This will cause all network traffic to be logged to the console for debugging
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         builder.addInterceptor(loggingInterceptor)
@@ -20,9 +20,9 @@ class ProfileManager {
         okHttpClient = builder.build()
     }
 
-    fun retrieveUUID(username: String) : String{
+    fun retrieveUUID(username: String) : String {
 
-        // get minecraft UUID
+        // Get minecraft UUID
         val requestUUID: Request = Request.Builder()
             .url("https://api.mojang.com/users/profiles/minecraft/$username")
             .get()
@@ -32,7 +32,7 @@ class ProfileManager {
         val responseUUID: Response = okHttpClient.newCall(requestUUID).execute()
         val responseBodyUUID: String? = responseUUID.body?.string()
 
-        // check if API call is successful
+        // Check if API call is successful
         if (responseUUID.isSuccessful && !responseBodyUUID.isNullOrEmpty()) {
             // parse and get UUID
             val json: JSONObject = JSONObject(responseBodyUUID)
@@ -41,7 +41,7 @@ class ProfileManager {
             return UUID
         }
 
-        // return empty string
+        // Return null
         return ""
     }
 }
