@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 
+// Database listener
 lateinit var paletteListener: ValueEventListener
 
 class PalettesActivity: AppCompatActivity() {
@@ -30,7 +33,7 @@ class PalettesActivity: AppCompatActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var firebaseDatabase: FirebaseDatabase
 
-    // TODO: progress bar
+    private lateinit var progressBar : ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,9 +41,6 @@ class PalettesActivity: AppCompatActivity() {
 
         // Log it
         Log.d("PalettesActivity", "onCreate called!")
-
-        // Set title
-        // title = resources.getText(R.string.palettes_activity_title);
 
         // Firebase
         firebaseAuth = FirebaseAuth.getInstance()
@@ -50,6 +50,9 @@ class PalettesActivity: AppCompatActivity() {
         /* palettes recyclerView */
         recyclerView = findViewById(R.id.PaletteView)
 
+        progressBar = findViewById(R.id.progressBarPalette)
+        progressBar.visibility = View.GONE
+
         // get data
         getPalettesFromFirebase()
     }
@@ -58,11 +61,14 @@ class PalettesActivity: AppCompatActivity() {
     // Get palettes data from FirebaseDB
     private fun getPalettesFromFirebase(){
 
+        // Show progress bar
+        progressBar.visibility = View.VISIBLE
+
         // Get data from palettes tables
         val referencePalettes = firebaseDatabase.getReference("palettes").orderByChild("likes")
         paletteListener = referencePalettes.addValueEventListener(object : ValueEventListener {
 
-            // Could not palettes information, show error and log it
+            // Could not find palettes information, show error and log it
             override fun onCancelled(error: DatabaseError) {
                 firebaseAnalytics.logEvent("firebasedb_cancelled", null)
                 Toast.makeText(
@@ -70,6 +76,8 @@ class PalettesActivity: AppCompatActivity() {
                     R.string.failed_to_retrieve_palettes,
                     Toast.LENGTH_LONG
                 ).show()
+
+                progressBar.visibility = View.GONE
 
                 Log.e("PalettesActivity", "DB connection issue", error.toException())
                 Firebase.crashlytics.recordException(error.toException())
@@ -84,8 +92,8 @@ class PalettesActivity: AppCompatActivity() {
                     try {
                         val UID = firebaseAuth.currentUser!!.uid
 
+                        // Store palette information
                         val palette = childSnapshot.getValue(Palettes::class.java)
-
                         if (palette != null) {
                             // check firebase for likes
                             val keys = childSnapshot.child("saved").toString()
@@ -94,6 +102,7 @@ class PalettesActivity: AppCompatActivity() {
                             }
                             palettes.add(0, palette)
                         }
+
                     } catch (exception: Exception) {
                         Log.e("PalettesActivity", "Failed to read palettes", exception)
                         Firebase.crashlytics.recordException(exception)
@@ -103,6 +112,8 @@ class PalettesActivity: AppCompatActivity() {
                 val adapter = PalettesAdapter(palettes)
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = LinearLayoutManager(this@PalettesActivity)
+
+                progressBar.visibility = View.GONE
             }
         })
 
@@ -135,7 +146,7 @@ class PalettesActivity: AppCompatActivity() {
                 startActivity(intent)
             }
 
-            // Search
+            // Search, Go to FindPalettesActivity
             R.id.SearchMenu -> {
                 Log.d("PalettesActivity", "Switch to FindPalettesActivity!")
                 val intent = Intent(this, FindPalettesActivity::class.java)

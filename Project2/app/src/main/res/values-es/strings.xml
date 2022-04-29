@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Block Picker</string>
+
+    <!-- Login Activity -->
+    <string name="login_activity_title">Ingrese a su cuenta</string>
+    <string name="login_title">Acceso</string>
+    <string name="email_login">Correo electrónico</string>
+    <string name="password_login">Clave</string>
+    <string name="login">Acceso</string>
+    <string name="signup">Inscribirse</string>
+
+    <string name="login_success">Inicio de sesión exitoso como %1$s</string>
+    <string name="login_no_user">Sin cuenta registrada</string>
+    <string name="login_failure_wrong_credentials">Por favor verifique su nombre de usuario o contraseña</string>
+    <string name="login_failure_generic">Error al iniciar sesión: %1$s</string>
+
+    <string name="failed_to_retrieve_account">No se pudo recuperar la información de la cuenta</string>
+
+    <!-- Signup Activity -->
+    <string name="signup_activity_title">Crear una cuenta</string>
+    <string name="signup_title">Inscribirse</string>
+    <string name="signup_button">Crear una cuenta</string>
+    <string name="email_signup">Correo electrónico</string>
+    <string name="signup_username">Nombre de usuario</string>
+    <string name="password_signup">Clave</string>
+    <string name="verify_password_signup">Verificar contraseña</string>
+    <string name="minecraft_username_signup">Nombre de usuario de Minecraft</string>
+    <string name="password_verify">Las contraseñas no coinciden</string>
+
+    <string name="signup_failure_invalid_mc_username">Nombre de usuario de Minecraft no válido</string>
+    <string name="signup_success">Registrado correctamente</string>
+    <string name="signup_failure_db_update">No se pudo registrar. Por favor crea una nueva cuenta.</string>
+    <string name="signup_failure_generic">No se pudo registrar: %1$s</string>
+    <string name="signup_failure_weak_username">El nombre de usuario debe tener al menos 5 caracteres.</string>
+    <string name="signup_failure_weak_password">La contraseña debe contener 6 caracteres como mínimo.</string>
+    <string name="signup_failure_already_exists">¡Ya existe una cuenta para este correo electrónico!</string>
+    <string name="signup_failure_invalid_format">¡Debe proporcionar un correo electrónico con el formato correcto!</string>
+
+    <!-- Profile -->
+    <string name="profile">Perfil</string>
+    <string name="profile_picture">Foto de perfil</string>
+    <string name="username_profile">Nombre de usuario</string>
+    <string name="create_palettes_profile">Paletas creadas</string>
+    <string name="save_palettes_profile">Paletas guardadas</string>
+
+    <!-- Palettes Activity -->
+    <string name="palettes_activity_title">Paletas destacadas</string>
+    <string name="palettes_activity_subheading">Las mejores paletas de nuestra base de datos</string>
+    <string name="palettes_name">%1$s</string>
+    <string name="palettes_author">%1$s</string>
+    <string name="palettes_saved">%1$s</string>
+    <string name="palettes_save">Botón Guardar</string>
+    <string name="palettes_share">Botón de compartir</string>
+    <string name="palettes_description">Paletas de bloques destacadas más preferidas por nuestros usuarios.</string>
+    <string name="palettes_search">Búsqueda</string>
+
+    <string name="failed_to_retrieve_palettes">No se pudieron recuperar las paletas</string>
+
+    <!-- Create Palettes Activity -->
+    <string name="create_palettes">Crear paleta de bloques</string>
+    <string name="name_palette">Nombre de la paleta:</string>
+    <string name="palette_blocks_title">Bloques utilizados</string>
+    <string name="palette_create">Crear paleta</string>
+
+    <string name="select_block">Hizo clic en el bloque</string>
+    <string name="hint">Use un nombre pregenerado o el suyo propio</string>
+    <string name="select_block_search">Seleccionar bloque</string>
+
+    <string name="palette_success">¡Paleta cargada con éxito!</string>
+    <string name="palette_failure">¡Falló la carga de la paleta! ¡Intentar otra vez!</string>
+
+    <!-- Find Palettes -->
+    <string name="find_result">Buscar por bloques</string>
+    <string name="find_title">Buscar Paletas</string>
+    <string name="find_result_general">No hay resultados</string>
+    <string name="find_result_fail">No hay resultados para %1$s</string>
+    <string name="find_result_block">Resultados encontrados para %1$s</string>
+
+    <!-- Menu -->
+    <string name="search_menu">Búsqueda</string>
+    <string name="create_menu">Crear paleta</string>
+    <string name="profile_menu">Perfil</string>
+    <string name="close_menu">Cerrar</string>
+
+    <!-- Search -->
+    <string name="select_block_to_search">Seleccionar bloque para buscar por</string>
+
+    <!-- Blocks -->
+    <!-- SPINNER -->
+    <string name="defaultSelected">Toque en la imagen para establecer el bloque</string>
+
+</resources>

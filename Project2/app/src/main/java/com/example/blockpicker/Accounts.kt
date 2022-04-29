@@ -2,7 +2,7 @@ package com.example.blockpicker
 
 import java.io.Serializable
 
-// Account Dataclass
+// Account data class
 data class Accounts(
     val username: String,
     val minecraftUsername: String,

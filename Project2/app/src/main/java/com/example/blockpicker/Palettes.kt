@@ -8,7 +8,7 @@ data class Palettes(
     val author: String,
     val authorUID: String,
     val minecraftUUID: String,
-    val likes: Int,
+    var likes: Int,
     var liked: Boolean,
     val paletteUrl: String,
     val block1: String,

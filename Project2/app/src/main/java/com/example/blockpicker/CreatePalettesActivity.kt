@@ -53,7 +53,7 @@ class CreatePalettesActivity : AppCompatActivity() {
     private lateinit var createButton : Button
     private lateinit var progressBar : ProgressBar
 
-    // Store palette information
+    // Store palette/block information
     private lateinit var blockName : Array<String>
     private var currentBlockIndex = 0
     private var currentPaletteSize = 0;
@@ -82,21 +82,20 @@ class CreatePalettesActivity : AppCompatActivity() {
         firebaseDatabase = FirebaseDatabase.getInstance()
         firebaseStore = FirebaseStorage.getInstance()
 
-        // Set value in array list
+        // Get block and put it in ArrayList
         blockList = arrayListOf(*resources.getStringArray(R.array.blocks))
 
         // Text View
         block = findViewById(R.id.SearchBlocks)
 
         /* Image View */
-        // Set up ImageView
         createBlock = ArrayList(6)
         blockName = arrayOf("","","","","","")
 
+        // IDs
         var imageViewId = arrayOf(R.id.Block1,R.id.Block2,R.id.Block3,R.id.Block4,R.id.Block5,R.id.Block6);
         var imageIconId = arrayOf(R.id.BlockIcon1,R.id.BlockIcon2,R.id.BlockIcon3,R.id.BlockIcon4,R.id.BlockIcon5,R.id.BlockIcon6)
         var cardIconId = arrayOf(R.id.CardIcon1,R.id.CardIcon2,R.id.CardIcon3,R.id.CardIcon4,R.id.CardIcon5,R.id.CardIcon6)
-
 
         // Get ImageView by ID and set OnClickListeners
         for(i in imageViewId.indices){
@@ -133,20 +132,23 @@ class CreatePalettesActivity : AppCompatActivity() {
         // PaletteName input
         paletteName = findViewById(R.id.NamePalette)
 
-        // Create palette, click on create button to upload palette
+        /* Create Palette */
+        // Click on create button to upload palette
         createButton = findViewById(R.id.PaletteCreate)
         createButton.setOnClickListener(){
 
-            // Show progress bar and disable button
+            // Show progress bar and disable button (to avoid multiple submission)
             progressBar.visibility = View.VISIBLE
             createButton.isEnabled = false
 
+            // Log it
             firebaseAnalytics.logEvent("create_button_clicked", null)
 
             // Get UID from firebaseAuth
             val UID: String = FirebaseAuth.getInstance().currentUser!!.uid!!
 
-            // Get paletteName, use hint name if no palette name is set
+            /* Get paletteName */
+            // Use hint name if no palette name is set
             var inputtedPaletteName = paletteName.text.toString().trim()
             if (inputtedPaletteName.isBlank()){
                 inputtedPaletteName = paletteName.hint.toString().trim()
@@ -160,9 +162,8 @@ class CreatePalettesActivity : AppCompatActivity() {
             val referencePalettes = firebaseDatabase.getReference("palettes")
             val key = referencePalettes.push().key;
 
-
-            /* combine bitmap and upload to firebase */
-            // combine bitmap to create a palette bitmap of 6 images
+            /* Combine bitmap and upload to firebase */
+            // Combine bitmap to create a palette bitmap of 6 images
             val combined = paletteBitmap()
 
             // Image ref and storage location
@@ -177,19 +178,19 @@ class CreatePalettesActivity : AppCompatActivity() {
             /* Firebase Storage */
             // Upload to palette bitmap Firebase storage
             val uploadData = paletteRef.putBytes(data)
-
             uploadData.addOnSuccessListener { task ->
 
                 // Get the Url of the block palette
                 task.metadata!!.reference!!.downloadUrl.addOnCompleteListener { uri ->
 
+                    // Successfully uploaded image to Firebase Storage
                     if(uri.isSuccessful){
 
                         /* Upload palette information to Firebase DB */
                         // Get palette image url
                         val paletteUrl = uri.result!!.toString()
 
-                        // Create blocks Hashmap
+                        // Create blocks Hashmap, allows for easier searching
                         val blocks = HashMap<String, Boolean>()
                         for (block in blockName) {
                             blocks[block] = true
@@ -216,9 +217,13 @@ class CreatePalettesActivity : AppCompatActivity() {
 
                         // Store palette data on Firebase
                         referencePalettes.child(key).setValue(palette).addOnCompleteListener {
+                            // Success
                             if(it.isSuccessful){
-                                // Successfully added accounts
-                                Toast.makeText(this, R.string.palette_success, Toast.LENGTH_LONG).show()
+                                // Successfully uploaded palette, show Toast
+                                Toast.makeText(this,
+                                    R.string.palette_success,
+                                    Toast.LENGTH_LONG
+                                ).show()
 
                                 // Go to PalettesActivity
                                 val intent = Intent(createButton.context, PalettesActivity::class.java)
@@ -226,7 +231,9 @@ class CreatePalettesActivity : AppCompatActivity() {
 
                                 // Prevent user from backing into the palettes screen
                                 finish()
-                            } else {
+                            }
+                            // Error
+                            else {
                                 val exception = it.exception
 
                                 // Log the error to crashlytics
@@ -240,9 +247,13 @@ class CreatePalettesActivity : AppCompatActivity() {
                                 firebaseAnalytics.logEvent("palette_create_failed", bundle)
 
                                 // Show error
-                                Toast.makeText(this, R.string.palette_failure, Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    this,
+                                    R.string.palette_failure,
+                                    Toast.LENGTH_LONG
+                                ).show()
 
-                                // Disable and Enable button on error
+                                //Hide progress bar and Enable button on error
                                 progressBar.visibility = View.GONE
                                 createButton.isEnabled = true
                             }
@@ -250,33 +261,35 @@ class CreatePalettesActivity : AppCompatActivity() {
                     }
                 }
             }
-
+            // Failed to upload image
             uploadData.addOnCanceledListener {
-
                 // Log the error to firebaseAnalytics
                 val bundle = Bundle()
                 bundle.putString("reason", "generic")
                 firebaseAnalytics.logEvent("palette_image_upload_failed", bundle)
 
                 // Show error
-                Toast.makeText(this, R.string.palette_failure, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this,
+                    R.string.palette_failure,
+                    Toast.LENGTH_LONG
+                ).show()
 
-                // Disable and Enable button on error
+                // Hide progress bar and Enable button on error
                 progressBar.visibility = View.GONE
                 createButton.isEnabled = true
-
             }
-
         }
 
+        // Hide progress bar and disable the create button
         progressBar.visibility = View.GONE
-
-        // Disable the create button
         createButton.isEnabled = false
     }
 
-    /* Show block select menu (dialog), update the palette on screen, and store palette information */
+    /* Show block select menu (dialog), update palette on screen, and store palette information */
     private fun selectBlock (){
+
+        // Searchable Dialog: https://www.geeksforgeeks.org/how-to-implement-custom-searchable-spinner-in-android/
         // Initialize dialog
         val builder = AlertDialog.Builder(this@CreatePalettesActivity)
         builder.setView(R.layout.searchable_spinner)
@@ -311,7 +324,7 @@ class CreatePalettesActivity : AppCompatActivity() {
             // Block selected
             var blockSelected = parent.getItemAtPosition(position) as String
 
-            // Increase palette size if the imageView previously empty
+            // Increase palette size if the imageView was previously empty
             if(blockName[currentBlockIndex].isEmpty()){
                 currentPaletteSize += 1
             }
@@ -319,7 +332,7 @@ class CreatePalettesActivity : AppCompatActivity() {
             // Set the block name
             blockName[currentBlockIndex] = "$blockSelected"
 
-            // If the first block is changed change palette hint
+            // If the first block has changed, update palette hint
             if(currentBlockIndex == 0){
                 paletteName.hint = "$blockSelected Palette"
             }
@@ -341,7 +354,7 @@ class CreatePalettesActivity : AppCompatActivity() {
                 .load(resId)
                 .into(currentBlockIcon)
 
-            // Load image
+            // Load block image
             Picasso
                 .get()
                 .load(resId)
@@ -419,7 +432,7 @@ class CreatePalettesActivity : AppCompatActivity() {
         return combined
     }
 
-    /* Close Create Palettes Menu */
+    /* Close CreatePalettesScreen */
     // Create an action bar button
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.close, menu)

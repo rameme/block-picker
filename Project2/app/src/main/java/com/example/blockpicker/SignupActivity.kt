@@ -82,7 +82,7 @@ class SignupActivity : AppCompatActivity() {
         minecraftUsername.addTextChangedListener(textWatcher)
 
         // Hide progress bar
-        progressBar.visibility = View.INVISIBLE
+        progressBar.visibility = View.GONE
     }
 
     /* createAccount */
@@ -90,6 +90,10 @@ class SignupActivity : AppCompatActivity() {
     // Then, create a account using Firebase auth
     // Lastly, store additional information (minecraft UUID, Username) to FirebaseRealTime database
     private fun createAccount(){
+
+        // Log it
+        firebaseAnalytics.logEvent("signup_clicked", null)
+
         // Get minecraft username
         val inputtedMinecraftUsername: String = minecraftUsername.text.toString().trim()
 
@@ -99,7 +103,6 @@ class SignupActivity : AppCompatActivity() {
 
         // Networking on a background thread
         doAsync {
-
             // Use the Mojang API to retrieve minecraft UUID
             var UUID: String = ""
             try {
@@ -171,9 +174,13 @@ class SignupActivity : AppCompatActivity() {
                                     }
                                     // Signout the user
                                     else {
-                                        // TODO: delete the account
                                         firebaseAuth.signOut()
                                         Toast.makeText(this@SignupActivity, R.string.signup_failure_db_update, Toast.LENGTH_LONG).show()
+
+                                        // Failed to add new user to database, log it
+                                        val bundle = Bundle()
+                                        bundle.putString("reason", "failed_to_add_$UUID")
+                                        firebaseAnalytics.logEvent("failed_to_add_user_to_database", bundle)
                                     }
                                 }
                             }
