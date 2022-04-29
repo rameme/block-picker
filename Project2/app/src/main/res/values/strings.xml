@@ -9,7 +9,7 @@
     <string name="login">Login</string>
     <string name="signup">Sign Up</string>
 
-    <string name="login_success">Registered successfully as %1$s</string>
+    <string name="login_success">Successfully logged in as %1$s</string>
     <string name="login_no_user">No Registered Account</string>
     <string name="login_failure_wrong_credentials">Please check your username or password</string>
     <string name="login_failure_generic">Failed to login: %1$s</string>
@@ -71,7 +71,7 @@
 
     <!-- Find Palettes -->
     <string name="find_result">Search by blocks</string>
-    <string name="find_title">Results</string>
+    <string name="find_title">Find Palettes</string>
     <string name="find_result_general">No results</string>
     <string name="find_result_fail">No results for %1$s</string>
     <string name="find_result_block">Found results for %1$s</string>
@@ -89,6 +89,7 @@
     <!-- SPINNER -->
     <string name="defaultSelected">Tap on image to set block</string>
 
+    <!-- No Translation -->
     <string-array name="blocks">
         <item>Acacia Leaves</item>
         <item>Acacia Log</item>

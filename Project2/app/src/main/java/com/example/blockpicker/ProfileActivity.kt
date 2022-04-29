@@ -10,9 +10,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.ActionBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -24,8 +24,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
-import org.w3c.dom.Text
-
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -37,13 +35,14 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var createPalettesText : TextView
     private lateinit var savePalettesText : TextView
 
-
     // Firebase
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var firebaseDatabase: FirebaseDatabase
 
-    // TODO: progress bar
+    private lateinit var progressBar : ProgressBar
+
+    lateinit var savePaletteListener: ValueEventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +58,10 @@ class ProfileActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         firebaseDatabase = FirebaseDatabase.getInstance()
+
+        // Progress bar
+        progressBar = findViewById(R.id.progressBarProfile)
+        progressBar.visibility = View.GONE
 
         // SharedPreferences
         val sharedPreferences: SharedPreferences = getSharedPreferences("block-picker", Context.MODE_PRIVATE)
@@ -79,11 +82,26 @@ class ProfileActivity : AppCompatActivity() {
         usernameText.setOnClickListener(){
             Log.d("ProfileActivity", "Logout User")
 
-            // Remove listener
+            // Show progress bar
+            progressBar.visibility = View.VISIBLE
+
+            // Log it
+            firebaseAnalytics.logEvent("logout_user", null)
+
+            // Remove listeners
             firebaseDatabase
                 .getReference("palettes")
-                .orderByChild("likes")
                 .removeEventListener(paletteListener)
+
+            firebaseDatabase
+                .getReference("palettes")
+                .removeEventListener(savePaletteListener)
+
+            if (findPaletteListener != null){
+                firebaseDatabase
+                    .getReference("palettes")
+                    .removeEventListener(findPaletteListener!!)
+            }
 
             firebaseAuth.signOut()
 
@@ -91,7 +109,10 @@ class ProfileActivity : AppCompatActivity() {
             sharedPreferences.edit().remove("USERNAME").apply();
             sharedPreferences.edit().remove("UUID").apply();
 
-            // Go to login screen
+            // Hide progress bar
+            progressBar.visibility = View.GONE
+
+            // Go to login screen, clear backstack
             val intent = Intent(this, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
@@ -113,6 +134,12 @@ class ProfileActivity : AppCompatActivity() {
     /* getCreatedPalettesFromFirebase */
     // Get palettes data from FirebaseDB
     private fun getCreatedPalettesFromFirebase(){
+
+        // Show progress bar
+        progressBar.visibility = View.VISIBLE
+
+        // Log it
+        firebaseAnalytics.logEvent("get_created_palettes", null)
 
         // Get data from palettes tables
         val UID: String = FirebaseAuth.getInstance().currentUser!!.uid!!
@@ -155,6 +182,9 @@ class ProfileActivity : AppCompatActivity() {
                 val adapter = PalettesAdapter(palettes)
                 createRecyclerView.adapter = adapter
                 createRecyclerView.layoutManager = LinearLayoutManager(this@ProfileActivity, LinearLayoutManager.HORIZONTAL, false)
+
+                // Hide progress bar
+                progressBar.visibility = View.GONE
             }
 
             // Could not palettes information, show error and log it
@@ -168,6 +198,9 @@ class ProfileActivity : AppCompatActivity() {
 
                 createPalettesText.visibility = View.GONE
 
+                // Hide progress bar
+                progressBar.visibility = View.GONE
+
                 Log.e("ProfileActivity", "DB connection issue", error.toException())
                 Firebase.crashlytics.recordException(error.toException())
             }
@@ -179,11 +212,17 @@ class ProfileActivity : AppCompatActivity() {
     // Get palettes data from FirebaseDB
     private fun getSavedPalettesFromFirebase(){
 
+        // Show progress bar
+        progressBar.visibility = View.VISIBLE
+
+        // Log it
+        firebaseAnalytics.logEvent("get_saved_palettes", null)
+
         // Get data from palettes tables
         val UID: String = FirebaseAuth.getInstance().currentUser!!.uid!!
 
         val reference = firebaseDatabase.getReference("palettes").orderByChild("saved/$UID").equalTo(true)
-        reference.addListenerForSingleValueEvent(object : ValueEventListener {
+        savePaletteListener = reference.addValueEventListener(object : ValueEventListener {
 
             // Found palettes data, show it in the recyclerView
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -221,6 +260,9 @@ class ProfileActivity : AppCompatActivity() {
                 val adapter = PalettesAdapter(palettes)
                 savedRecyclerView.adapter = adapter
                 savedRecyclerView.layoutManager = LinearLayoutManager(this@ProfileActivity, LinearLayoutManager.HORIZONTAL, false)
+
+                // Hide progress bar
+                progressBar.visibility = View.GONE
             }
 
             // Could not palettes information, show error and log it
@@ -233,6 +275,9 @@ class ProfileActivity : AppCompatActivity() {
                 ).show()
 
                 savePalettesText.visibility = View.GONE
+
+                // Hide progress bar
+                progressBar.visibility = View.GONE
 
                 Log.e("ProfileActivity", "DB connection issue", error.toException())
                 Firebase.crashlytics.recordException(error.toException())
@@ -260,7 +305,7 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    /* Close Create Palettes Menu */
+    /* Close CreatePalettesScreen */
     // Create an action bar button
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.close, menu)

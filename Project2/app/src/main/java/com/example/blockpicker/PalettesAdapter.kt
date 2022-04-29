@@ -2,7 +2,6 @@ package com.example.blockpicker
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,13 +51,12 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater: LayoutInflater = LayoutInflater.from(parent.context)
         val rootLayout: View = layoutInflater.inflate(R.layout.row_palettes, parent, false)
-        val viewHolder = ViewHolder(rootLayout)
-        return viewHolder
+        return ViewHolder(rootLayout)
     }
 
     // Display row on the screen
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentPalettes = palettes[position]
+        var currentPalettes = palettes[position]
         val context = holder.blockBitmap1.context
 
         // On click listener
@@ -99,7 +97,7 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
             .load(getResId(currentPalettes.block6, context))
             .into(holder.blockBitmap6)
 
-        // Share
+        // Share Palette
         holder.paletteShareButton.setOnClickListener() {
             ShareCompat.IntentBuilder(context)
                 .setType("text/plain")
@@ -119,7 +117,6 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
         holder.paletteSaved.text = currentPalettes.likes.toString()
 
         // Firebase
-        // TODO: add logging
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseAnalytics = FirebaseAnalytics.getInstance(context)
         firebaseDatabase = FirebaseDatabase.getInstance()
@@ -127,7 +124,6 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
         val UID = firebaseAuth.currentUser!!.uid
 
         /* Update like button icon */
-
         // Disable like button if we own the Palette
         if(currentPalettes.authorUID == UID){
             holder.paletteSavedButton.isEnabled = false
@@ -146,13 +142,14 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
         holder.paletteSavedButton.setOnClickListener(){
 
             val referencePalettes = firebaseDatabase.getReference("palettes")
-
             // Like the palette, increment the counter and add user to Saved
             if(!currentPalettes.liked){
                 holder.paletteSavedButton.setImageResource(R.drawable.ic_favorite_red)
                 currentPalettes.liked = true
 
-                // TODO: use firebase transactions
+                // Log it
+                firebaseAnalytics.logEvent("like_button_clicked_increment", null)
+
                 // Add user to "saved"
                 referencePalettes
                     .child(currentPalettes.paletteID)
@@ -170,7 +167,8 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
                 holder.paletteSavedButton.setImageResource(R.drawable.ic_favorite_border)
                 currentPalettes.liked = false
 
-                // TODO: use firebase transactions
+                firebaseAnalytics.logEvent("like_button_clicked_decrement", null)
+
                 // Remove user from "saved"
                 referencePalettes
                     .child(currentPalettes.paletteID)

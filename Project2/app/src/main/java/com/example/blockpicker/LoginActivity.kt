@@ -88,7 +88,8 @@ class LoginActivity : AppCompatActivity() {
                         ).show()
 
                         // Get additional account information from firebase DB
-                        firebaseAnalytics.logEvent("get_additional_account_info", null)
+                        // Log it
+                        firebaseAnalytics.logEvent("get_additional_account_info_for_login", null)
 
                         // Get Firebase UID to find account
                         val UID: String = FirebaseAuth.getInstance().currentUser!!.uid

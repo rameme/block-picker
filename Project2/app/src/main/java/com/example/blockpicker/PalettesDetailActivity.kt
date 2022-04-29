@@ -26,7 +26,6 @@ class PalettesDetailActivity : AppCompatActivity() {
         setContentView(R.layout.palettes_detail_activity)
 
         /* Load Palette Data */
-
         // IDs
         var imageViewId = arrayOf(R.id.Block1,R.id.Block2,R.id.Block3,R.id.Block4,R.id.Block5,R.id.Block6);
         var imageIconId = arrayOf(R.id.BlockIcon1,R.id.BlockIcon2,R.id.BlockIcon3,R.id.BlockIcon4,R.id.BlockIcon5,R.id.BlockIcon6)
@@ -68,7 +67,6 @@ class PalettesDetailActivity : AppCompatActivity() {
         // Palette title
         var paletteName : TextView = findViewById(R.id.PaletteName)
         paletteName.text = palette.name
-
         title = palette.name
 
         // Author
@@ -98,7 +96,6 @@ class PalettesDetailActivity : AppCompatActivity() {
 
         /* likes */
         // Firebase
-        // TODO: add logging
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         firebaseDatabase = FirebaseDatabase.getInstance()
@@ -131,7 +128,9 @@ class PalettesDetailActivity : AppCompatActivity() {
                 paletteSavedButton.setImageResource(R.drawable.ic_favorite_red)
                 palette.liked = true
 
-                // TODO: use firebase transactions
+                // Log it
+                firebaseAnalytics.logEvent("like_button_clicked_increment", null)
+
                 // Add user to "saved"
                 referencePalettes
                     .child(palette.paletteID)
@@ -149,7 +148,9 @@ class PalettesDetailActivity : AppCompatActivity() {
                 paletteSavedButton.setImageResource(R.drawable.ic_favorite_border)
                 palette.liked = false
 
-                // TODO: use firebase transactions
+                // Log it
+                firebaseAnalytics.logEvent("like_button_clicked_decrement", null)
+
                 // Remove user from "saved"
                 referencePalettes
                     .child(palette.paletteID)
@@ -166,7 +167,7 @@ class PalettesDetailActivity : AppCompatActivity() {
         }
     }
 
-    /* Close Create Palettes Menu */
+    /* Close CreatePalettesDetail */
     // Create an action bar button
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.close, menu)

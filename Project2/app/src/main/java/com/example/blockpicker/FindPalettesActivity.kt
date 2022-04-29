@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,9 @@ import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import android.widget.Toast
 import com.google.firebase.database.*
+
+// Database listener
+var findPaletteListener: ValueEventListener? = null
 
 class FindPalettesActivity : AppCompatActivity() {
 
@@ -35,6 +39,8 @@ class FindPalettesActivity : AppCompatActivity() {
     private lateinit var blockList : ArrayList<String>
     private lateinit var dialog : Dialog
 
+    private lateinit var progressBar : ProgressBar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.find_palettes_activity)
@@ -50,9 +56,9 @@ class FindPalettesActivity : AppCompatActivity() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         firebaseDatabase = FirebaseDatabase.getInstance()
 
-        // Set value in array list
-        blockList = ArrayList<String>()
-        blockList = arrayListOf<String>(*resources.getStringArray(R.array.blocks))
+        // Get block and put it in ArrayList
+        blockList = ArrayList()
+        blockList = arrayListOf(*resources.getStringArray(R.array.blocks))
 
         /* recyclerView */
         recyclerView = findViewById(R.id.ResultView)
@@ -67,10 +73,16 @@ class FindPalettesActivity : AppCompatActivity() {
         }
 
         resultText.text = getString(R.string.find_result_general)
+
+        // Progress bar
+        progressBar = findViewById(R.id.progressBarFind)
+        progressBar.visibility = View.GONE
     }
 
     /* Show block menu and search for palettes by block name */
     private fun searchBlock () {
+
+        // Searchable Dialog: https://www.geeksforgeeks.org/how-to-implement-custom-searchable-spinner-in-android/
         // Initialize dialog
         val builder = AlertDialog.Builder(this@FindPalettesActivity)
         builder.setView(R.layout.searchable_spinner)
@@ -125,9 +137,13 @@ class FindPalettesActivity : AppCompatActivity() {
 
     /* Search firebase */
     private fun searchFirebase(blockSelected : String){
-        val referencePalettes : Query = firebaseDatabase.getReference("palettes").orderByChild("blocks/$blockSelected").equalTo(true)
 
-        referencePalettes.addListenerForSingleValueEvent(object : ValueEventListener {
+        // Show progress bar
+        progressBar.visibility = View.VISIBLE
+
+        // Search Firebase
+        val referencePalettes : Query = firebaseDatabase.getReference("palettes").orderByChild("blocks/$blockSelected").equalTo(true)
+        findPaletteListener = referencePalettes.addValueEventListener(object : ValueEventListener {
 
             // Could not palettes information, show error and log it
             override fun onCancelled(error: DatabaseError) {
@@ -140,6 +156,9 @@ class FindPalettesActivity : AppCompatActivity() {
 
                 resultText.text = getString(R.string.find_result_fail, blockSelected)
                 searchBlockText.setText(getString(R.string.find_result))
+
+                // Hide progress bar
+                progressBar.visibility = View.GONE
 
                 Log.e("FindPalettesActivity", "DB connection issue", error.toException())
                 Firebase.crashlytics.recordException(error.toException())
@@ -185,12 +204,13 @@ class FindPalettesActivity : AppCompatActivity() {
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = LinearLayoutManager(this@FindPalettesActivity)
 
-                Log.e("FindPalettesActivity", "Loading more data 0")
+                // Hide progress bar
+                progressBar.visibility = View.GONE
             }
         })
     }
 
-    /* Close Create Palettes Menu */
+    /* Close CreatePalettesScreen */
     // Create an action bar button
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.close, menu)
