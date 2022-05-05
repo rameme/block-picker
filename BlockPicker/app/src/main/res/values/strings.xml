@@ -1,0 +1,509 @@
+<resources>
+    <string name="app_name">Block Picker</string>
+
+    <!-- Login Activity -->
+    <string name="login_activity_title">Login to Your Account</string>
+    <string name="login_title">Login</string>
+    <string name="email_login">Email</string>
+    <string name="password_login">Password</string>
+    <string name="login">Login</string>
+    <string name="signup">Sign Up</string>
+
+    <string name="login_success">Successfully logged in as %1$s</string>
+    <string name="login_no_user">No Registered Account</string>
+    <string name="login_failure_wrong_credentials">Please check your username or password</string>
+    <string name="login_failure_generic">Failed to login: %1$s</string>
+
+    <string name="failed_to_retrieve_account">Failed to retrieve account information</string>
+
+    <!-- Signup Activity -->
+    <string name="signup_activity_title">Create Account</string>
+    <string name="signup_title">Sign Up</string>
+    <string name="signup_button">Create Account</string>
+    <string name="email_signup">Email</string>
+    <string name="signup_username">Username</string>
+    <string name="password_signup">Password</string>
+    <string name="verify_password_signup">Verify Password</string>
+    <string name="minecraft_username_signup">Minecraft Username</string>
+    <string name="password_verify">Password does not match</string>
+
+    <string name="signup_failure_invalid_mc_username">Invalid Minecraft Username</string>
+    <string name="signup_success">Registered successfully</string>
+    <string name="signup_failure_db_update">Failed to signup. Please create a new account.</string>
+    <string name="signup_failure_generic">Failed to register: %1$s</string>
+    <string name="signup_failure_weak_username">Username must be at least 5 characters long.</string>
+    <string name="signup_failure_weak_password">Password must be at least 6 characters long.</string>
+    <string name="signup_failure_already_exists">An account already exists for this email!</string>
+    <string name="signup_failure_invalid_format">You must provide a correctly formatted email!</string>
+
+    <!-- Profile -->
+    <string name="profile">Profile</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="username_profile">Username</string>
+    <string name="create_palettes_profile">Created Palettes</string>
+    <string name="save_palettes_profile">Saved Palettes</string>
+
+    <!-- Palettes Activity -->
+    <string name="palettes_activity_title">Featured Palettes</string>
+    <string name="palettes_activity_subheading">Top palettes in our database</string>
+    <string name="palettes_name">%1$s</string>
+    <string name="palettes_author">%1$s</string>
+    <string name="palettes_saved">%1$s</string>
+    <string name="palettes_save">Save Button</string>
+    <string name="palettes_share">Share Button</string>
+    <string name="palettes_description">Featured block palettes most liked by our users.</string>
+    <string name="palettes_search">Search</string>
+
+    <string name="failed_to_retrieve_palettes">Failed to retrieve palettes</string>
+
+    <!-- Create Palettes Activity -->
+    <string name="create_palettes">Create Block Palette</string>
+    <string name="name_palette">Palette Name:</string>
+    <string name="palette_blocks_title">Blocks Used</string>
+    <string name="palette_create">Create Palette</string>
+
+    <string name="select_block">Clicked on block</string>
+    <string name="hint">Use pre-generated name or your own</string>
+    <string name="select_block_search">Select Block</string>
+
+    <string name="palette_success">Palette successfully uploaded!</string>
+    <string name="palette_failure">Palette uploaded failed! Try again!</string>
+
+    <!-- Find Palettes -->
+    <string name="find_result">Search by blocks</string>
+    <string name="find_title">Find Palettes</string>
+    <string name="find_result_general">No results</string>
+    <string name="find_result_fail">No results for %1$s</string>
+    <string name="find_result_block">Found results for %1$s</string>
+
+    <!-- Menu -->
+    <string name="search_menu">Search</string>
+    <string name="create_menu">Create Palette</string>
+    <string name="profile_menu">Profile</string>
+    <string name="close_menu">Close</string>
+
+    <!-- Search -->
+    <string name="select_block_to_search">Select block to search by</string>
+
+    <!-- Blocks -->
+    <!-- SPINNER -->
+    <string name="defaultSelected">Tap on image to set block</string>
+
+    <!-- No Translation -->
+    <string-array name="blocks">
+        <item>Acacia Leaves</item>
+        <item>Acacia Log</item>
+        <item>Acacia Log Top</item>
+        <item>Acacia Planks</item>
+        <item>Acacia Trapdoor</item>
+        <item>Ancient Debris</item>
+        <item>Ancient Debris Top</item>
+        <item>Andesite</item>
+        <item>Azalea Leaves</item>
+        <item>Azalea Top</item>
+        <item>Barrel</item>
+        <item>Basalt</item>
+        <item>Basalt Top</item>
+        <item>Beacon</item>
+        <item>Bedrock</item>
+        <item>Beehive</item>
+        <item>Bee Nest</item>
+        <item>Birch Leaves</item>
+        <item>Birch Log</item>
+        <item>Birch Log Top</item>
+        <item>Birch Planks</item>
+        <item>Birch Trapdoor</item>
+        <item>Blackstone</item>
+        <item>Blackstone Top</item>
+        <item>Black Concrete</item>
+        <item>Black Concrete Powder</item>
+        <item>Black Glazed Terracotta</item>
+        <item>Black Shulker Box</item>
+        <item>Black Stained Glass</item>
+        <item>Black Terracotta</item>
+        <item>Black Wool</item>
+        <item>Blast Furnace</item>
+        <item>Block of Amethyst</item>
+        <item>Block of Coal</item>
+        <item>Block of Copper</item>
+        <item>Block of Diamond</item>
+        <item>Block of Emerald</item>
+        <item>Block of Gold</item>
+        <item>Block of Iron</item>
+        <item>Block of Lapis Lazuli</item>
+        <item>Block of Netherite</item>
+        <item>Block of Quartz</item>
+        <item>Block of Raw Copper</item>
+        <item>Block of Raw Gold</item>
+        <item>Block of Raw Iron</item>
+        <item>Block of Redstone</item>
+        <item>Blue Concrete</item>
+        <item>Blue Concrete Powder</item>
+        <item>Blue Glazed Terracotta</item>
+        <item>Blue Ice</item>
+        <item>Blue Shulker Box</item>
+        <item>Blue Stained Glass</item>
+        <item>Blue Terracotta</item>
+        <item>Blue Wool</item>
+        <item>Bone Block</item>
+        <item>Bone Block Top</item>
+        <item>Bookshelf</item>
+        <item>Brain Coral Block</item>
+        <item>Bricks</item>
+        <item>Brown Concrete</item>
+        <item>Brown Concrete Powder</item>
+        <item>Brown Glazed Terracotta</item>
+        <item>Brown Mushroom Block</item>
+        <item>Brown Shulker Box</item>
+        <item>Brown Stained Glass</item>
+        <item>Brown Terracotta</item>
+        <item>Brown Wool</item>
+        <item>Bubble Coral Block</item>
+        <item>Budding Amethyst</item>
+        <item>Cactus</item>
+        <item>Cactus Top</item>
+        <item>Cake</item>
+        <item>Calcite</item>
+        <item>Cartography Table</item>
+        <item>Carved Pumpkin</item>
+        <item>Cauldron</item>
+        <item>Cave Vinesberries Plant</item>
+        <item>Cave Vinesplant</item>
+        <item>Chest</item>
+        <item>Chiseled Deepslate</item>
+        <item>Chiseled Nether Bricks</item>
+        <item>Chiseled Polished Blackstone</item>
+        <item>Chiseled Quartz Block</item>
+        <item>Chiseled Quartz Block Top</item>
+        <item>Chiseled Red Sandstone</item>
+        <item>Chiseled Sandstone</item>
+        <item>Chiseled Stone Bricks</item>
+        <item>Chorus Flower</item>
+        <item>Chorus Plant</item>
+        <item>Clay</item>
+        <item>Coal Ore</item>
+        <item>Coarse Dirt</item>
+        <item>Cobbled Deepslate</item>
+        <item>Cobblestone</item>
+        <item>Cobweb</item>
+        <item>Composter</item>
+        <item>Copper Ore</item>
+        <item>Cracked Deepslate Bricks</item>
+        <item>Cracked Deepslate Tiles</item>
+        <item>Cracked Nether Bricks</item>
+        <item>Cracked Polished Blackstone Bricks</item>
+        <item>Cracked Stone Bricks</item>
+        <item>Crafting Table</item>
+        <item>Crimson Nylium</item>
+        <item>Crimson Nylium Top</item>
+        <item>Crimson Planks</item>
+        <item>Crimson Stem</item>
+        <item>Crimson Stem Top</item>
+        <item>Crimson Trapdoor</item>
+        <item>Crying Obsidian</item>
+        <item>Cut Copper</item>
+        <item>Cut Red Sandstone</item>
+        <item>Cut Sandstone</item>
+        <item>Cyan Concrete</item>
+        <item>Cyan Concrete Powder</item>
+        <item>Cyan Glazed Terracotta</item>
+        <item>Cyan Shulker Box</item>
+        <item>Cyan Stained Glass</item>
+        <item>Cyan Terracotta</item>
+        <item>Cyan Wool</item>
+        <item>Dark Oak Leaves</item>
+        <item>Dark Oak Log</item>
+        <item>Dark Oak Log Top</item>
+        <item>Dark Oak Planks</item>
+        <item>Dark Oak Trapdoor</item>
+        <item>Dark Prismarine</item>
+        <item>Daylight Detector</item>
+        <item>Dead Bush</item>
+        <item>Dead Chorus Flower</item>
+        <item>Deepslate</item>
+        <item>Deepslate Bricks</item>
+        <item>Deepslate Coal Ore</item>
+        <item>Deepslate Copper Ore</item>
+        <item>Deepslate Diamond Ore</item>
+        <item>Deepslate Emerald Ore</item>
+        <item>Deepslate Gold Ore</item>
+        <item>Deepslate Iron Ore</item>
+        <item>Deepslate Lapis Lazuli Ore</item>
+        <item>Deepslate Redstone Ore</item>
+        <item>Deepslate Tiles</item>
+        <item>Deepslate Top</item>
+        <item>Diamond Ore</item>
+        <item>Diorite</item>
+        <item>Dirt</item>
+        <item>Dirt Path</item>
+        <item>Dirt Path Top</item>
+        <item>Dispenser</item>
+        <item>Dried Kelp Block</item>
+        <item>Dried Kelp Block Top</item>
+        <item>Dripstone Block</item>
+        <item>Dropper</item>
+        <item>Emerald Ore</item>
+        <item>Enchanting Table</item>
+        <item>End Portal Frame Top</item>
+        <item>End Stone</item>
+        <item>End Stone Bricks</item>
+        <item>Exposed Copper</item>
+        <item>Exposed Cut Copper</item>
+        <item>Farmland Dry</item>
+        <item>Farmland Wet</item>
+        <item>Fire Coral Block</item>
+        <item>Fletching Table</item>
+        <item>Flowering Azalea Leaves</item>
+        <item>Flowering Azalea Top</item>
+        <item>Frosted Ice Age</item>
+        <item>Furnace</item>
+        <item>Gilded Blackstone</item>
+        <item>Glass</item>
+        <item>Glowstone</item>
+        <item>Glow Lichen</item>
+        <item>Gold Ore</item>
+        <item>Granite</item>
+        <item>Grass Block Side</item>
+        <item>Gravel</item>
+        <item>Gray Concrete</item>
+        <item>Gray Concrete Powder</item>
+        <item>Gray Glazed Terracotta</item>
+        <item>Gray Shulker Box</item>
+        <item>Gray Stained Glass</item>
+        <item>Gray Terracotta</item>
+        <item>Gray Wool</item>
+        <item>Green Concrete</item>
+        <item>Green Concrete Powder</item>
+        <item>Green Glazed Terracotta</item>
+        <item>Green Shulker Box</item>
+        <item>Green Stained Glass</item>
+        <item>Green Terracotta</item>
+        <item>Green Wool</item>
+        <item>Hanging Roots</item>
+        <item>Hay Bale</item>
+        <item>Hay Bale Top</item>
+        <item>Honeycomb Block</item>
+        <item>Honey Block</item>
+        <item>Horn Coral Block</item>
+        <item>Ice</item>
+        <item>Inverted Daylight Detector Top</item>
+        <item>Iron Bars</item>
+        <item>Iron Ore</item>
+        <item>Iron Trapdoor</item>
+        <item>Item Frame</item>
+        <item>Jack o Lantern</item>
+        <item>Jukebox</item>
+        <item>Jungle Leaves</item>
+        <item>Jungle Log</item>
+        <item>Jungle Log Top</item>
+        <item>Jungle Planks</item>
+        <item>Jungle Trapdoor</item>
+        <item>Ladder</item>
+        <item>Lapis Lazuli Ore</item>
+        <item>Lava</item>
+        <item>Light Blue Concrete</item>
+        <item>Light Blue Concrete Powder</item>
+        <item>Light Blue Glazed Terracotta</item>
+        <item>Light Blue Shulker Box</item>
+        <item>Light Blue Stained Glass</item>
+        <item>Light Blue Terracotta</item>
+        <item>Light Blue Wool</item>
+        <item>Light Gray Concrete</item>
+        <item>Light Gray Concrete Powder</item>
+        <item>Light Gray Glazed Terracotta</item>
+        <item>Light Gray Shulker Box</item>
+        <item>Light Gray Stained Glass</item>
+        <item>Light Gray Terracotta</item>
+        <item>Light Gray Wool</item>
+        <item>Lime Concrete</item>
+        <item>Lime Concrete Powder</item>
+        <item>Lime Glazed Terracotta</item>
+        <item>Lime Shulker Box</item>
+        <item>Lime Stained Glass</item>
+        <item>Lime Terracotta</item>
+        <item>Lime Wool</item>
+        <item>Loom</item>
+        <item>Magenta Concrete</item>
+        <item>Magenta Concrete Powder</item>
+        <item>Magenta Glazed Terracotta</item>
+        <item>Magenta Shulker Box</item>
+        <item>Magenta Stained Glass</item>
+        <item>Magenta Terracotta</item>
+        <item>Magenta Wool</item>
+        <item>Magma Block</item>
+        <item>Melon Side</item>
+        <item>Melon Top</item>
+        <item>Mossy Cobblestone</item>
+        <item>Mossy Stone Bricks</item>
+        <item>Moss Block</item>
+        <item>Mushroom Blockin Side</item>
+        <item>Mushroom Stem</item>
+        <item>Mycelium</item>
+        <item>Mycelium Top</item>
+        <item>Netherrack</item>
+        <item>Nether Bricks</item>
+        <item>Nether Gold Ore</item>
+        <item>Nether Portal</item>
+        <item>Nether Quartz Ore</item>
+        <item>Nether Wart Block</item>
+        <item>Oak Leaves</item>
+        <item>Oak Log</item>
+        <item>Oak Log Top</item>
+        <item>Oak Planks</item>
+        <item>Oak Trapdoor</item>
+        <item>Observer</item>
+        <item>Obsidian</item>
+        <item>Orange Concrete</item>
+        <item>Orange Concrete Powder</item>
+        <item>Orange Glazed Terracotta</item>
+        <item>Orange Shulker Box</item>
+        <item>Orange Stained Glass</item>
+        <item>Orange Terracotta</item>
+        <item>Orange Wool</item>
+        <item>Oxidized Copper</item>
+        <item>Oxidized Cut Copper</item>
+        <item>Packed Ice</item>
+        <item>Pink Concrete</item>
+        <item>Pink Concrete Powder</item>
+        <item>Pink Glazed Terracotta</item>
+        <item>Pink Shulker Box</item>
+        <item>Pink Stained Glass</item>
+        <item>Pink Terracotta</item>
+        <item>Pink Wool</item>
+        <item>Piston</item>
+        <item>Piston Head</item>
+        <item>Podzol</item>
+        <item>Podzol Top</item>
+        <item>Polished Andesite</item>
+        <item>Polished Basalt</item>
+        <item>Polished Basalt Top</item>
+        <item>Polished Blackstone</item>
+        <item>Polished Blackstone Bricks</item>
+        <item>Polished Deepslate</item>
+        <item>Polished Diorite</item>
+        <item>Polished Granite</item>
+        <item>Powder Snow</item>
+        <item>Prismarine</item>
+        <item>Prismarine Bricks</item>
+        <item>Pumpkin</item>
+        <item>Pumpkin Top</item>
+        <item>Purple Concrete</item>
+        <item>Purple Concrete Powder</item>
+        <item>Purple Glazed Terracotta</item>
+        <item>Purple Shulker Box</item>
+        <item>Purple Stained Glass</item>
+        <item>Purple Terracotta</item>
+        <item>Purple Wool</item>
+        <item>Purpur Block</item>
+        <item>Purpur Pillar</item>
+        <item>Purpur Pillar Top</item>
+        <item>Quartz Bricks</item>
+        <item>Quartz Pillar</item>
+        <item>Quartz Pillar Top</item>
+        <item>Redstone Lamp Off</item>
+        <item>Redstone Lamp On</item>
+        <item>Redstone Ore</item>
+        <item>Red Concrete</item>
+        <item>Red Concrete Powder</item>
+        <item>Red Glazed Terracotta</item>
+        <item>Red Mushroom Block</item>
+        <item>Red Nether Bricks</item>
+        <item>Red Sand</item>
+        <item>Red Sandstone</item>
+        <item>Red Sandstone Bottom</item>
+        <item>Red Sandstone Top</item>
+        <item>Red Shulker Box</item>
+        <item>Red Stained Glass</item>
+        <item>Red Terracotta</item>
+        <item>Red Wool</item>
+        <item>Respawn Anchor</item>
+        <item>Rooted Dirt</item>
+        <item>Sand</item>
+        <item>Sandstone Bottom</item>
+        <item>Sandstone</item>
+        <item>Sandstone Top</item>
+        <item>Scaffolding</item>
+        <item>Sculk Catalyst</item>
+        <item>Sculk Catalyst Bottom</item>
+        <item>Sculk Catalyst Top</item>
+        <item>Sculk Sensor Bottom</item>
+        <item>Sculk Sensor Top</item>
+        <item>Sea Lantern</item>
+        <item>Shroomlight</item>
+        <item>Shulker Box</item>
+        <item>Slime Block</item>
+        <item>Smithing Table</item>
+        <item>Smoker</item>
+        <item>Smooth Basalt</item>
+        <item>Smooth Stone</item>
+        <item>Smooth Stone Slab</item>
+        <item>Snow</item>
+        <item>Snowy Grass Block</item>
+        <item>Soul Sand</item>
+        <item>Soul Soil</item>
+        <item>Spawner</item>
+        <item>Sponge</item>
+        <item>Spore Blossomleaves</item>
+        <item>Spore Blossompetal </item>
+        <item>Spruce Leaves</item>
+        <item>Spruce Log</item>
+        <item>Spruce Log Top</item>
+        <item>Spruce Planks</item>
+        <item>Spruce Trapdoor</item>
+        <item>Sticky Piston Head</item>
+        <item>Stone</item>
+        <item>Stone Bricks</item>
+        <item>Stripped Acacia Log</item>
+        <item>Stripped Acacia Log Top</item>
+        <item>Stripped Birch Log</item>
+        <item>Stripped Birch Log Top</item>
+        <item>Stripped Crimson Stem</item>
+        <item>Stripped Crimson Stem Top</item>
+        <item>Stripped Dark Oak Log</item>
+        <item>Stripped Dark Oak Log Top</item>
+        <item>Stripped Jungle Log</item>
+        <item>Stripped Jungle Log Top</item>
+        <item>Stripped Oak Log</item>
+        <item>Stripped Oak Log Top</item>
+        <item>Stripped Spruce Log</item>
+        <item>Stripped Spruce Log Top</item>
+        <item>Stripped Warped Stem</item>
+        <item>Stripped Warped Stem Top</item>
+        <item>Sweet Berry Bush</item>
+        <item>Target</item>
+        <item>Terracotta</item>
+        <item>Tinted Glass</item>
+        <item>TNT</item>
+        <item>Tube Coral Block</item>
+        <item>Tuff</item>
+        <item>Twisting Vines Plant</item>
+        <item>Vines</item>
+        <item>Warped Nylium Side</item>
+        <item>Warped Nylium Top</item>
+        <item>Warped Planks</item>
+        <item>Warped Stem</item>
+        <item>Warped Stem Top</item>
+        <item>Warped Trapdoor</item>
+        <item>Warped Wart Block</item>
+        <item>Water</item>
+        <item>Weathered Copper</item>
+        <item>Weathered Cut Copper</item>
+        <item>Weeping Vines Plant</item>
+        <item>Wet Sponge</item>
+        <item>White Concrete</item>
+        <item>White Concrete Powder</item>
+        <item>White Glazed Terracotta</item>
+        <item>White Shulker Box</item>
+        <item>White Stained Glass</item>
+        <item>White Terracotta</item>
+        <item>White Wool</item>
+        <item>Yellow Concrete</item>
+        <item>Yellow Concrete Powder</item>
+        <item>Yellow Glazed Terracotta</item>
+        <item>Yellow Shulker Box</item>
+        <item>Yellow Stained Glass</item>
+        <item>Yellow Terracotta</item>
+        <item>Yellow Wool</item>
+    </string-array>
+
+</resources>
