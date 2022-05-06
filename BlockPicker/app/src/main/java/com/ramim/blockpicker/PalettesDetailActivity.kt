@@ -1,5 +1,6 @@
 package com.ramim.blockpicker
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -8,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
+import androidx.core.content.ContextCompat
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -100,7 +102,11 @@ class PalettesDetailActivity : AppCompatActivity() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         firebaseDatabase = FirebaseDatabase.getInstance()
 
-        val UID = firebaseAuth.currentUser!!.uid
+        val UID = if(firebaseAuth.currentUser != null){
+            firebaseAuth.currentUser!!.uid
+        } else {
+            ""
+        }
 
         var paletteSavedButton : ImageButton = findViewById(R.id.PaletteSavedButton)
 
@@ -121,48 +127,70 @@ class PalettesDetailActivity : AppCompatActivity() {
         /* Update likes Firebase */
         paletteSavedButton.setOnClickListener(){
 
-            val referencePalettes = firebaseDatabase.getReference("palettes")
+            // if the UID is empty, send to login screen
+            if (UID.isEmpty()){
+                // Remove listeners
+                firebaseDatabase
+                    .getReference("palettes")
+                    .removeEventListener(paletteListener)
 
-            // Like the palette, increment the counter and add user to Saved
-            if(!palette.liked){
-                paletteSavedButton.setImageResource(R.drawable.ic_favorite_red)
-                palette.liked = true
+                if (findPaletteListener != null){
+                    firebaseDatabase
+                        .getReference("palettes")
+                        .removeEventListener(findPaletteListener!!)
+                }
 
-                // Log it
-                firebaseAnalytics.logEvent("like_button_clicked_increment", null)
-
-                // Add user to "saved"
-                referencePalettes
-                    .child(palette.paletteID)
-                    .child("saved")
-                    .child(UID).setValue(true)
-
-                referencePalettes
-                    .child(palette.paletteID)
-                    .child("likes")
-                    .setValue(ServerValue.increment(1))
+                // Hide progress bar
+                // Go to login screen, clear backstack
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity( intent)
 
             }
-            // Unlike the Palette, decrement the counter and remove user from Saved
+            // the user is logged, update the palette information
             else {
-                paletteSavedButton.setImageResource(R.drawable.ic_favorite_border)
-                palette.liked = false
 
-                // Log it
-                firebaseAnalytics.logEvent("like_button_clicked_decrement", null)
+                val referencePalettes = firebaseDatabase.getReference("palettes")
+                // Like the palette, increment the counter and add user to Saved
+                if (!palette.liked) {
+                    paletteSavedButton.setImageResource(R.drawable.ic_favorite_red)
+                    palette.liked = true
 
-                // Remove user from "saved"
-                referencePalettes
-                    .child(palette.paletteID)
-                    .child("saved")
-                    .child(UID)
-                    .removeValue()
+                    // Log it
+                    firebaseAnalytics.logEvent("like_button_clicked_increment", null)
 
-                // Decrement palette like
-                referencePalettes
-                    .child(palette.paletteID)
-                    .child("likes")
-                    .setValue(ServerValue.increment(-1))
+                    // Add user to "saved"
+                    referencePalettes
+                        .child(palette.paletteID)
+                        .child("saved")
+                        .child(UID).setValue(true)
+
+                    referencePalettes
+                        .child(palette.paletteID)
+                        .child("likes")
+                        .setValue(ServerValue.increment(1))
+
+                }
+                // Unlike the Palette, decrement the counter and remove user from Saved
+                else {
+                    paletteSavedButton.setImageResource(R.drawable.ic_favorite_border)
+                    palette.liked = false
+
+                    // Log it
+                    firebaseAnalytics.logEvent("like_button_clicked_decrement", null)
+
+                    // Remove user from "saved"
+                    referencePalettes
+                        .child(palette.paletteID)
+                        .child("saved")
+                        .child(UID)
+                        .removeValue()
+
+                    // Decrement palette like
+                    referencePalettes
+                        .child(palette.paletteID)
+                        .child("likes")
+                        .setValue(ServerValue.increment(-1))
+                }
             }
         }
     }

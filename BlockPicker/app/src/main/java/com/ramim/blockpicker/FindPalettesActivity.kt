@@ -170,14 +170,20 @@ class FindPalettesActivity : AppCompatActivity() {
                 val palettes = mutableListOf<Palettes>()
                 snapshot.children.forEach { childSnapshot: DataSnapshot ->
                     try {
-                        val UID = firebaseAuth.currentUser!!.uid
+
+                        // Get UID, set to empty string if not found
+                        val UID = if(firebaseAuth.currentUser != null){
+                            firebaseAuth.currentUser!!.uid
+                        } else {
+                            ""
+                        }
 
                         val palette = childSnapshot.getValue(Palettes::class.java)
 
                         if (palette != null && palette.blocks!!.containsKey(blockSelected)) {
                             // check firebase for likes
                             val keys = childSnapshot.child("saved").toString()
-                            if(UID in keys){
+                            if(UID in keys && UID.isNotBlank()){
                                 palette.liked = true
                             }
                             palettes.add(0, palette)

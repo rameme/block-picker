@@ -78,6 +78,35 @@ class CreatePalettesActivity : AppCompatActivity() {
         firebaseDatabase = FirebaseDatabase.getInstance()
         firebaseStore = FirebaseStorage.getInstance()
 
+        // Progress bar
+        progressBar = findViewById(R.id.progressBarCreate)
+
+        // Check if the user is logged in, if they don't have an account
+        // Send them to login screen
+        if (firebaseAuth.currentUser == null){
+            // Show progress bar
+            progressBar.visibility = View.VISIBLE
+
+            // Remove listeners
+            firebaseDatabase
+                .getReference("palettes")
+                .removeEventListener(paletteListener)
+
+            if (findPaletteListener != null){
+                firebaseDatabase
+                    .getReference("palettes")
+                    .removeEventListener(findPaletteListener!!)
+            }
+
+            // Hide progress bar
+            progressBar.visibility = View.GONE
+
+            // Go to login screen, clear backstack
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         // Get block and put it in ArrayList
         blockList = arrayListOf(*resources.getStringArray(R.array.blocks))
 
@@ -121,9 +150,6 @@ class CreatePalettesActivity : AppCompatActivity() {
             var createPaletteText : TextView = findViewById(paletteBlockId[i])
             paletteList.add(createPaletteText)
         }
-
-        // Progress bar
-        progressBar = findViewById(R.id.progressBarCreate)
 
         // PaletteName input
         paletteName = findViewById(R.id.NamePalette)

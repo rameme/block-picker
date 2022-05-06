@@ -13,5 +13,5 @@ Top Palette | Profile | Palette | Create Palette |
 ![](./Screenshots/Screenshot_20220504_001101.png) | ![](./Screenshots/Screenshot_20220504_001158.png) | ![](./Screenshots/Screenshot_20220504_001212.png) | ![](./Screenshots/Screenshot_20220504_220329.png)
 
 # Author
-Name: Ramim
-Github: [https://github.com/rameme](https://github.com/rameme)
+- Name: Ramim 
+- Github: [https://github.com/rameme](https://github.com/rameme)

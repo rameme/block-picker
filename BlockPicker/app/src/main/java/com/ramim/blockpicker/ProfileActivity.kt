@@ -59,37 +59,14 @@ class ProfileActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progressBarProfile)
         progressBar.visibility = View.GONE
 
-        // SharedPreferences
-        val sharedPreferences: SharedPreferences = getSharedPreferences("block-picker", Context.MODE_PRIVATE)
-
-        // Get author and minecraft UUID from sharedPrefs
-        val username = sharedPreferences.getString("USERNAME", "")
-        val minecraftUUID = sharedPreferences.getString("UUID", "")
-
-        // Set profile avatar
-        profileAvatar = findViewById(R.id.AvatarProfile)
-        setAvatar(minecraftUUID!!)
-
-        // Set profile name
-        usernameText = findViewById(R.id.UsernameProfile)
-        usernameText.text = username
-
-        // Logout user
-        usernameText.setOnClickListener(){
-            // Show progress bar
-            progressBar.visibility = View.VISIBLE
-
-            // Log it
-            firebaseAnalytics.logEvent("logout_user", null)
+        // Check if the user is logged in, if they don't have an account
+        // Send them to login screen
+        if (firebaseAuth.currentUser == null){
 
             // Remove listeners
             firebaseDatabase
                 .getReference("palettes")
                 .removeEventListener(paletteListener)
-
-            firebaseDatabase
-                .getReference("palettes")
-                .removeEventListener(savePaletteListener)
 
             if (findPaletteListener != null){
                 firebaseDatabase
@@ -97,32 +74,79 @@ class ProfileActivity : AppCompatActivity() {
                     .removeEventListener(findPaletteListener!!)
             }
 
-            firebaseAuth.signOut()
-
-            // clear sharedPreferences
-            sharedPreferences.edit().remove("USERNAME").apply();
-            sharedPreferences.edit().remove("UUID").apply();
-
-            // Hide progress bar
-            progressBar.visibility = View.GONE
-
             // Go to login screen, clear backstack
             val intent = Intent(this, LoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()
+
         }
+        // The user logged in, show them their profile
+        else {
+            // SharedPreferences
+            val sharedPreferences: SharedPreferences = getSharedPreferences("block-picker", Context.MODE_PRIVATE)
 
-        createPalettesText = findViewById(R.id.CreatePalettes)
-        savePalettesText = findViewById(R.id.SavePalettes)
+            // Get author and minecraft UUID from sharedPrefs
+            val username = sharedPreferences.getString("USERNAME", "")
+            val minecraftUUID = sharedPreferences.getString("UUID", "")
 
-        /* palettes created recyclerView */
-        createRecyclerView = findViewById(R.id.CreateView)
-        getCreatedPalettesFromFirebase()
+            // Set profile avatar
+            profileAvatar = findViewById(R.id.AvatarProfile)
+            setAvatar(minecraftUUID!!)
 
-        /* palettes saved recyclerView */
-        savedRecyclerView = findViewById(R.id.SaveView)
-        getSavedPalettesFromFirebase()
+            // Set profile name
+            usernameText = findViewById(R.id.UsernameProfile)
+            usernameText.text = username
+
+            // Logout user
+            usernameText.setOnClickListener(){
+                // Show progress bar
+                progressBar.visibility = View.VISIBLE
+
+                // Log it
+                firebaseAnalytics.logEvent("logout_user", null)
+
+                // Remove listeners
+                firebaseDatabase
+                    .getReference("palettes")
+                    .removeEventListener(paletteListener)
+
+                firebaseDatabase
+                    .getReference("palettes")
+                    .removeEventListener(savePaletteListener)
+
+                if (findPaletteListener != null){
+                    firebaseDatabase
+                        .getReference("palettes")
+                        .removeEventListener(findPaletteListener!!)
+                }
+
+                firebaseAuth.signOut()
+
+                // clear sharedPreferences
+                sharedPreferences.edit().remove("USERNAME").apply();
+                sharedPreferences.edit().remove("UUID").apply();
+
+                // Hide progress bar
+                progressBar.visibility = View.GONE
+
+                // Go to login screen, clear backstack
+                val intent = Intent(this, PalettesActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+            }
+
+            createPalettesText = findViewById(R.id.CreatePalettes)
+            savePalettesText = findViewById(R.id.SavePalettes)
+
+            /* palettes created recyclerView */
+            createRecyclerView = findViewById(R.id.CreateView)
+            getCreatedPalettesFromFirebase()
+
+            /* palettes saved recyclerView */
+            savedRecyclerView = findViewById(R.id.SaveView)
+            getSavedPalettesFromFirebase()
+        }
     }
 
     /* getCreatedPalettesFromFirebase */
