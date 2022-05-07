@@ -62,7 +62,7 @@ class LoginActivity : AppCompatActivity() {
         loginButton.isEnabled = false
 
         // Login the user using FirebaseAuth and Store additional information to sharedPreferences
-        loginButton.setOnClickListener(){
+        loginButton.setOnClickListener {
 
             progressBar.visibility = View.VISIBLE
 
@@ -195,7 +195,7 @@ class LoginActivity : AppCompatActivity() {
 
         // Go to signup screen
         signupButton = findViewById(R.id.Signup)
-        signupButton.setOnClickListener(){
+        signupButton.setOnClickListener {
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
         }

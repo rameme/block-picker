@@ -56,11 +56,11 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
 
     // Display row on the screen
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var currentPalettes = palettes[position]
+        val currentPalettes = palettes[position]
         val context = holder.blockBitmap1.context
 
         // On click listener
-        holder.paletteCardView.setOnClickListener(){
+        holder.paletteCardView.setOnClickListener {
             val intent = Intent(holder.paletteCardView.context, PalettesDetailActivity::class.java)
             intent.putExtra("PALETTE", currentPalettes)
             startActivity(context, intent, null)
@@ -98,7 +98,7 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
             .into(holder.blockBitmap6)
 
         // Share Palette
-        holder.paletteShareButton.setOnClickListener() {
+        holder.paletteShareButton.setOnClickListener {
             ShareCompat.IntentBuilder(context)
                 .setType("text/plain")
                 .setChooserTitle("Share URL")
@@ -144,7 +144,7 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
         }
 
         /* Update likes Firebase */
-        holder.paletteSavedButton.setOnClickListener(){
+        holder.paletteSavedButton.setOnClickListener {
 
             // if the UID is empty, send to login screen
             if (UID.isEmpty()){
@@ -220,7 +220,7 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
     // Helper function: get the resource ID from the block name
     private fun getResId(block: String, context: Context): Int {
         // Get the drawable ID from block name
-        var block1Id = block.lowercase().replace(" ", "_")
+        val block1Id = block.lowercase().replace(" ", "_")
 
         return context.resources.getIdentifier(
             block1Id, "drawable",

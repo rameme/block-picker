@@ -64,7 +64,7 @@ class FindPalettesActivity : AppCompatActivity() {
         searchBlockText.isFocusable = false
 
         // search block
-        searchBlockText.setOnClickListener(){
+        searchBlockText.setOnClickListener {
             searchBlock()
         }
 
@@ -88,7 +88,7 @@ class FindPalettesActivity : AppCompatActivity() {
         dialog.show()
 
         // Set dialog
-        var dialogTitle: TextView = dialog.findViewById(R.id.SearchBlockTitle)
+        val dialogTitle: TextView = dialog.findViewById(R.id.SearchBlockTitle)
         dialogTitle.text = getString(R.string.select_block_to_search)
 
         val searchBlock: EditText = dialog.findViewById(R.id.SearchBlock)
@@ -107,7 +107,7 @@ class FindPalettesActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                adapter.filter.filter(p0);
+                adapter.filter.filter(p0)
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -117,7 +117,7 @@ class FindPalettesActivity : AppCompatActivity() {
         // Click on the desired block name and search for it
         listBlocks.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             // Block selected
-            var blockSelected = parent.getItemAtPosition(position) as String
+            val blockSelected = parent.getItemAtPosition(position) as String
 
             // Search by block
             if (blockSelected.isNotBlank()){

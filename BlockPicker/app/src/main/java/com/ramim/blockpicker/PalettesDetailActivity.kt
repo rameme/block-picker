@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
-import androidx.core.content.ContextCompat
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -29,25 +28,25 @@ class PalettesDetailActivity : AppCompatActivity() {
 
         /* Load Palette Data */
         // IDs
-        var imageViewId = arrayOf(R.id.Block1,R.id.Block2,R.id.Block3,R.id.Block4,R.id.Block5,R.id.Block6);
-        var imageIconId = arrayOf(R.id.BlockIcon1,R.id.BlockIcon2,R.id.BlockIcon3,R.id.BlockIcon4,R.id.BlockIcon5,R.id.BlockIcon6)
-        var paletteBlockId = arrayOf(R.id.PaletteBlock1,R.id.PaletteBlock2,R.id.PaletteBlock3,R.id.PaletteBlock4,R.id.PaletteBlock5,R.id.PaletteBlock6);
+        val imageViewId = arrayOf(R.id.Block1,R.id.Block2,R.id.Block3,R.id.Block4,R.id.Block5,R.id.Block6)
+        val imageIconId = arrayOf(R.id.BlockIcon1,R.id.BlockIcon2,R.id.BlockIcon3,R.id.BlockIcon4,R.id.BlockIcon5,R.id.BlockIcon6)
+        val paletteBlockId = arrayOf(R.id.PaletteBlock1,R.id.PaletteBlock2,R.id.PaletteBlock3,R.id.PaletteBlock4,R.id.PaletteBlock5,R.id.PaletteBlock6)
 
         // Get palette information
-        var palette : Palettes = intent.getSerializableExtra("PALETTE") as Palettes
+        val palette : Palettes = intent.getSerializableExtra("PALETTE") as Palettes
 
         val blocks = arrayOf(palette.block1,palette.block2,palette.block3,palette.block4,palette.block5,palette.block6)
 
         // Set ImageView and TextView
         for(i in imageViewId.indices){
-            var createBlockView : ImageView = findViewById(imageViewId[i])
-            var createBlockIcon : ImageView = findViewById(imageIconId[i])
-            var paletteBlockText : TextView = findViewById(paletteBlockId[i])
+            val createBlockView : ImageView = findViewById(imageViewId[i])
+            val createBlockIcon : ImageView = findViewById(imageIconId[i])
+            val paletteBlockText : TextView = findViewById(paletteBlockId[i])
 
             paletteBlockText.text = blocks[i]
 
             // Get the drawable ID from block name
-            var blockId = blocks[i].lowercase().replace(" ","_")
+            val blockId = blocks[i].lowercase().replace(" ","_")
             val resId = resources.getIdentifier(
                 blockId, "drawable",
                 packageName
@@ -67,28 +66,28 @@ class PalettesDetailActivity : AppCompatActivity() {
         }
 
         // Palette title
-        var paletteName : TextView = findViewById(R.id.PaletteName)
+        val paletteName : TextView = findViewById(R.id.PaletteName)
         paletteName.text = palette.name
         title = palette.name
 
         // Author
-        var paletteAuthor : TextView = findViewById(R.id.PaletteAuthor)
+        val paletteAuthor : TextView = findViewById(R.id.PaletteAuthor)
         paletteAuthor.text = palette.author
 
         // Likes
-        var paletteSaved : TextView = findViewById(R.id.PaletteSaved)
+        val paletteSaved : TextView = findViewById(R.id.PaletteSaved)
         paletteSaved.text = palette.likes.toString()
 
         // Show player Avatar
-        var avatar : ImageView = findViewById(R.id.PaletteAuthorAvatar)
+        val avatar : ImageView = findViewById(R.id.PaletteAuthorAvatar)
         Picasso
             .get()
             .load("https://crafatar.com/avatars/${palette.minecraftUUID}")
             .into(avatar)
 
         // Share
-        var paletteShareButton : ImageButton = findViewById(R.id.PaletteShareButton)
-        paletteShareButton.setOnClickListener() {
+        val paletteShareButton : ImageButton = findViewById(R.id.PaletteShareButton)
+        paletteShareButton.setOnClickListener {
             ShareCompat.IntentBuilder(this)
                 .setType("text/plain")
                 .setChooserTitle("Share URL")
@@ -108,7 +107,7 @@ class PalettesDetailActivity : AppCompatActivity() {
             ""
         }
 
-        var paletteSavedButton : ImageButton = findViewById(R.id.PaletteSavedButton)
+        val paletteSavedButton : ImageButton = findViewById(R.id.PaletteSavedButton)
 
         // Disable like button if we own the Palette
         if(palette.authorUID == UID){
@@ -125,7 +124,7 @@ class PalettesDetailActivity : AppCompatActivity() {
         }
 
         /* Update likes Firebase */
-        paletteSavedButton.setOnClickListener(){
+        paletteSavedButton.setOnClickListener {
 
             // if the UID is empty, send to login screen
             if (UID.isEmpty()){

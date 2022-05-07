@@ -123,7 +123,7 @@ class PalettesActivity: AppCompatActivity() {
     // Create an action bar button
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_person);
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_person)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         return super.onCreateOptionsMenu(menu)
     }

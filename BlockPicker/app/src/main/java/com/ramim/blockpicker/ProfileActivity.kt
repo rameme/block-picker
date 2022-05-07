@@ -41,14 +41,14 @@ class ProfileActivity : AppCompatActivity() {
 
     private lateinit var progressBar : ProgressBar
 
-    lateinit var savePaletteListener: ValueEventListener
+    private lateinit var savePaletteListener: ValueEventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.profile_activity)
 
         // Set title
-        title = resources.getText(R.string.profile);
+        title = resources.getText(R.string.profile)
 
         // Firebase
         firebaseAuth = FirebaseAuth.getInstance()
@@ -98,7 +98,7 @@ class ProfileActivity : AppCompatActivity() {
             usernameText.text = username
 
             // Logout user
-            usernameText.setOnClickListener(){
+            usernameText.setOnClickListener {
                 // Show progress bar
                 progressBar.visibility = View.VISIBLE
 
@@ -123,8 +123,8 @@ class ProfileActivity : AppCompatActivity() {
                 firebaseAuth.signOut()
 
                 // clear sharedPreferences
-                sharedPreferences.edit().remove("USERNAME").apply();
-                sharedPreferences.edit().remove("UUID").apply();
+                sharedPreferences.edit().remove("USERNAME").apply()
+                sharedPreferences.edit().remove("UUID").apply()
 
                 // Hide progress bar
                 progressBar.visibility = View.GONE

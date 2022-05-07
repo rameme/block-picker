@@ -5,7 +5,7 @@ Ever trying to make a build in Minecraft and you just can't find the perfect col
 > Closed Testing
 
 # Webstie
-[Block Picker](rameme.github.io/block-picker-website/)
+[Block Picker](https://rameme.github.io/block-picker-website/)
 
 # Screenshots
 Top Palette | Profile | Palette | Create Palette |

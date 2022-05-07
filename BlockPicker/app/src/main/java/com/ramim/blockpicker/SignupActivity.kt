@@ -43,7 +43,7 @@ class SignupActivity : AppCompatActivity() {
         setContentView(R.layout.signup_activity)
 
         // Set title
-        title = resources.getText(R.string.signup_activity_title);
+        title = resources.getText(R.string.signup_activity_title)
 
         // Get UI elements
         email = findViewById(R.id.EmailSignup)

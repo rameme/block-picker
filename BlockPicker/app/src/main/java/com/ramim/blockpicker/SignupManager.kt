@@ -35,7 +35,7 @@ class SignupManager {
         // Check if API call is successful
         if (responseUUID.isSuccessful && !responseBodyUUID.isNullOrEmpty()) {
             // parse and get UUID
-            val json: JSONObject = JSONObject(responseBodyUUID)
+            val json = JSONObject(responseBodyUUID)
             var UUID: String = json.getString("id")
 
             return UUID

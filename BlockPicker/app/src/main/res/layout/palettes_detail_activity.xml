@@ -35,6 +35,7 @@
 
 
                     android:adjustViewBounds="true"
+                    android:contentDescription="@string/select_block_description"
                     android:scaleType="fitXY"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -47,6 +48,7 @@
                     android:layout_height="wrap_content"
 
                     android:adjustViewBounds="true"
+                    android:contentDescription="@string/select_block_description"
                     android:scaleType="fitXY"
                     app:layout_constraintStart_toEndOf="@+id/Block1"
                     app:layout_constraintTop_toTopOf="parent"
@@ -59,6 +61,7 @@
                     android:layout_height="wrap_content"
 
                     android:adjustViewBounds="true"
+                    android:contentDescription="@string/select_block_description"
                     android:scaleType="fitXY"
                     app:layout_constraintStart_toEndOf="@+id/Block2"
                     app:layout_constraintTop_toTopOf="parent"
@@ -70,9 +73,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
+                    android:contentDescription="@string/select_block_description"
+
+
                     android:scaleType="fitXY"
-
-
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/Block1"
                     app:layout_constraintWidth_percent="0.3333"
@@ -83,8 +87,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
+                    android:contentDescription="@string/select_block_description"
 
+                    android:scaleType="fitXY"
                     app:layout_constraintStart_toEndOf="@+id/Block4"
                     app:layout_constraintTop_toBottomOf="@+id/Block2"
                     app:layout_constraintWidth_percent="0.3333"
@@ -95,8 +100,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
+                    android:contentDescription="@string/select_block_description"
 
+                    android:scaleType="fitXY"
                     app:layout_constraintStart_toEndOf="@+id/Block5"
                     app:layout_constraintTop_toBottomOf="@+id/Block3"
                     app:layout_constraintWidth_percent="0.3333"
@@ -123,8 +129,7 @@
                     android:text="@string/palettes_author"
                     android:textSize="16sp"
                     app:layout_constraintStart_toEndOf="@+id/AvatarCard"
-                    app:layout_constraintTop_toBottomOf="@+id/PaletteName"
-                    tools:text="Rameme" />
+                    app:layout_constraintTop_toBottomOf="@+id/PaletteName" />
 
                 <TextView
                     android:id="@+id/PaletteName"
@@ -177,7 +182,9 @@
                         android:id="@+id/PaletteAuthorAvatar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:contentDescription="@string/select_profile"
                         app:srcCompat="@drawable/avatar"
+                        tools:ignore="ImageContrastCheck"
                         tools:srcCompat="@tools:sample/avatars" />
                 </androidx.cardview.widget.CardView>
 
@@ -295,6 +302,7 @@
                         android:id="@+id/BlockIcon1"
                         android:layout_width="22dp"
                         android:layout_height="22dp"
+                        android:contentDescription="@string/select_block_icon"
                         tools:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
                 </androidx.cardview.widget.CardView>
 
@@ -311,6 +319,7 @@
                         android:id="@+id/BlockIcon2"
                         android:layout_width="22dp"
                         android:layout_height="22dp"
+                        android:contentDescription="@string/select_block_icon"
                         tools:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
                 </androidx.cardview.widget.CardView>
 
@@ -327,6 +336,7 @@
                         android:id="@+id/BlockIcon3"
                         android:layout_width="22dp"
                         android:layout_height="22dp"
+                        android:contentDescription="@string/select_block_icon"
                         tools:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
                 </androidx.cardview.widget.CardView>
 
@@ -343,6 +353,7 @@
                         android:id="@+id/BlockIcon4"
                         android:layout_width="22dp"
                         android:layout_height="22dp"
+                        android:contentDescription="@string/select_block_icon"
                         tools:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
                 </androidx.cardview.widget.CardView>
 
@@ -359,6 +370,7 @@
                         android:id="@+id/BlockIcon5"
                         android:layout_width="22dp"
                         android:layout_height="22dp"
+                        android:contentDescription="@string/select_block_icon"
                         tools:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
                 </androidx.cardview.widget.CardView>
 
@@ -375,6 +387,7 @@
                         android:id="@+id/BlockIcon6"
                         android:layout_width="22dp"
                         android:layout_height="22dp"
+                        android:contentDescription="@string/select_block_icon"
                         tools:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
                 </androidx.cardview.widget.CardView>
 
