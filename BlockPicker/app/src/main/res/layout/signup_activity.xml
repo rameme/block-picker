@@ -44,7 +44,8 @@
                 android:inputType="textEmailAddress"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/SignupTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/SignupTitle"
+                android:autofillHints="" />
 
             <EditText
                 android:id="@+id/UsernameSignup"
@@ -58,7 +59,9 @@
                 android:inputType="textPersonName"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/EmailSignup" />
+                app:layout_constraintTop_toBottomOf="@+id/EmailSignup"
+                tools:ignore="TextContrastCheck"
+                android:autofillHints="" />
 
             <EditText
                 android:id="@+id/PasswordSignup"
@@ -72,7 +75,9 @@
                 android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/UsernameSignup" />
+                app:layout_constraintTop_toBottomOf="@+id/UsernameSignup"
+                tools:ignore="TextContrastCheck"
+                android:importantForAutofill="no" />
 
             <EditText
                 android:id="@+id/PasswordVerifySignup"
@@ -86,7 +91,9 @@
                 android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/PasswordSignup" />
+                app:layout_constraintTop_toBottomOf="@+id/PasswordSignup"
+                tools:ignore="TextContrastCheck"
+                android:importantForAutofill="no" />
 
             <EditText
                 android:id="@+id/McUsernameSignup"
@@ -100,7 +107,9 @@
                 android:inputType="textPersonName"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/PasswordVerifySignup" />
+                app:layout_constraintTop_toBottomOf="@+id/PasswordVerifySignup"
+                tools:ignore="TextContrastCheck"
+                android:autofillHints="" />
 
             <Button
                 android:id="@+id/SignupButton"

@@ -49,8 +49,8 @@
     <string name="palettes_name">%1$s</string>
     <string name="palettes_author">%1$s</string>
     <string name="palettes_saved">%1$s</string>
-    <string name="palettes_save">Save Button</string>
-    <string name="palettes_share">Share Button</string>
+    <string name="palettes_save">Save</string>
+    <string name="palettes_share">Share</string>
     <string name="palettes_description">Featured block palettes most liked by our users.</string>
     <string name="palettes_search">Search</string>
 
@@ -69,6 +69,10 @@
     <string name="palette_success">Palette successfully uploaded!</string>
     <string name="palette_failure">Palette uploaded failed! Try again!</string>
 
+    <string name="select_block_description">Block</string>
+    <string name="select_block_icon">Block icon</string>
+    <string name="select_profile">Creator avatar</string>
+
     <!-- Find Palettes -->
     <string name="find_result">Search by blocks</string>
     <string name="find_title">Find Palettes</string>
@@ -84,6 +88,7 @@
 
     <!-- Search -->
     <string name="select_block_to_search">Select block to search by</string>
+    <string name="search_block">Search...</string>
 
     <!-- Blocks -->
     <!-- SPINNER -->

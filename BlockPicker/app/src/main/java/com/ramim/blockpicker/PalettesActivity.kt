@@ -85,14 +85,20 @@ class PalettesActivity: AppCompatActivity() {
                 val palettes = mutableListOf<Palettes>()
                 snapshot.children.forEach { childSnapshot: DataSnapshot ->
                     try {
-                        val UID = firebaseAuth.currentUser!!.uid
+
+                        // Get UID, set to empty string if not found
+                        val UID = if(firebaseAuth.currentUser != null){
+                            firebaseAuth.currentUser!!.uid
+                        } else {
+                            ""
+                        }
 
                         // Store palette information
                         val palette = childSnapshot.getValue(Palettes::class.java)
                         if (palette != null) {
                             // check firebase for likes
                             val keys = childSnapshot.child("saved").toString()
-                            if(UID in keys){
+                            if(UID in keys && UID.isNotBlank()){
                                 palette.liked = true
                             }
                             palettes.add(0, palette)
@@ -117,7 +123,7 @@ class PalettesActivity: AppCompatActivity() {
     // Create an action bar button
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_person);
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_person)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         return super.onCreateOptionsMenu(menu)
     }

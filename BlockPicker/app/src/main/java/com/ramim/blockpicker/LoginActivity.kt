@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -60,7 +62,7 @@ class LoginActivity : AppCompatActivity() {
         loginButton.isEnabled = false
 
         // Login the user using FirebaseAuth and Store additional information to sharedPreferences
-        loginButton.setOnClickListener(){
+        loginButton.setOnClickListener {
 
             progressBar.visibility = View.VISIBLE
 
@@ -193,7 +195,7 @@ class LoginActivity : AppCompatActivity() {
 
         // Go to signup screen
         signupButton = findViewById(R.id.Signup)
-        signupButton.setOnClickListener(){
+        signupButton.setOnClickListener {
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
         }
@@ -236,5 +238,16 @@ class LoginActivity : AppCompatActivity() {
         }
 
         override fun afterTextChanged(p0: Editable?) {}
+    }
+
+    /* Navigation */
+    // Create an action bar button
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    // Handle button activities
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return super.onOptionsItemSelected(item)
     }
 }

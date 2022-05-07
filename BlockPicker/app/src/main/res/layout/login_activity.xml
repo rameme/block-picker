@@ -40,10 +40,11 @@
                 android:layout_marginEnd="64dp"
                 android:ems="10"
                 android:hint="@string/email_login"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/LoginTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/LoginTitle"
+                android:autofillHints="" />
 
             <Button
                 android:id="@+id/Signup"
@@ -71,7 +72,9 @@
                 android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/EmailLogin" />
+                app:layout_constraintTop_toBottomOf="@+id/EmailLogin"
+                tools:ignore="TextContrastCheck"
+                android:importantForAutofill="no" />
 
             <Button
                 android:id="@+id/LoginButton"
@@ -83,7 +86,8 @@
                 android:text="@string/login"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/PasswordLogin" />
+                app:layout_constraintTop_toBottomOf="@+id/PasswordLogin"
+                tools:ignore="DuplicateSpeakableTextCheck" />
 
             <ProgressBar
                 android:id="@+id/progressBarLogin"

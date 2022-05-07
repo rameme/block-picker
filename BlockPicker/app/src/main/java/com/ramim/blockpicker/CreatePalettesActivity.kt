@@ -55,7 +55,7 @@ class CreatePalettesActivity : AppCompatActivity() {
     // Store palette/block information
     private lateinit var blockName : Array<String>
     private var currentBlockIndex = 0
-    private var currentPaletteSize = 0;
+    private var currentPaletteSize = 0
 
     // Dialog
     private lateinit var block : TextView
@@ -78,6 +78,35 @@ class CreatePalettesActivity : AppCompatActivity() {
         firebaseDatabase = FirebaseDatabase.getInstance()
         firebaseStore = FirebaseStorage.getInstance()
 
+        // Progress bar
+        progressBar = findViewById(R.id.progressBarCreate)
+
+        // Check if the user is logged in, if they don't have an account
+        // Send them to login screen
+        if (firebaseAuth.currentUser == null){
+            // Show progress bar
+            progressBar.visibility = View.VISIBLE
+
+            // Remove listeners
+            firebaseDatabase
+                .getReference("palettes")
+                .removeEventListener(paletteListener)
+
+            if (findPaletteListener != null){
+                firebaseDatabase
+                    .getReference("palettes")
+                    .removeEventListener(findPaletteListener!!)
+            }
+
+            // Hide progress bar
+            progressBar.visibility = View.GONE
+
+            // Go to login screen, clear backstack
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         // Get block and put it in ArrayList
         blockList = arrayListOf(*resources.getStringArray(R.array.blocks))
 
@@ -89,19 +118,19 @@ class CreatePalettesActivity : AppCompatActivity() {
         blockName = arrayOf("","","","","","")
 
         // IDs
-        var imageViewId = arrayOf(R.id.Block1,R.id.Block2,R.id.Block3,R.id.Block4,R.id.Block5,R.id.Block6);
-        var imageIconId = arrayOf(R.id.BlockIcon1,R.id.BlockIcon2,R.id.BlockIcon3,R.id.BlockIcon4,R.id.BlockIcon5,R.id.BlockIcon6)
-        var cardIconId = arrayOf(R.id.CardIcon1,R.id.CardIcon2,R.id.CardIcon3,R.id.CardIcon4,R.id.CardIcon5,R.id.CardIcon6)
+        val imageViewId = arrayOf(R.id.Block1,R.id.Block2,R.id.Block3,R.id.Block4,R.id.Block5,R.id.Block6)
+        val imageIconId = arrayOf(R.id.BlockIcon1,R.id.BlockIcon2,R.id.BlockIcon3,R.id.BlockIcon4,R.id.BlockIcon5,R.id.BlockIcon6)
+        val cardIconId = arrayOf(R.id.CardIcon1,R.id.CardIcon2,R.id.CardIcon3,R.id.CardIcon4,R.id.CardIcon5,R.id.CardIcon6)
 
         // Get ImageView by ID and set OnClickListeners
         for(i in imageViewId.indices){
-            var createBlockView : ImageView = findViewById(imageViewId[i])
-            var createBlockIcon : ImageView = findViewById(imageIconId[i])
-            var cardBlockIcon : CardView = findViewById(cardIconId[i])
+            val createBlockView : ImageView = findViewById(imageViewId[i])
+            val createBlockIcon : ImageView = findViewById(imageIconId[i])
+            val cardBlockIcon : CardView = findViewById(cardIconId[i])
             cardBlockIcon.visibility = View.INVISIBLE
 
             // OnClickListeners for the image views
-            createBlockView.setOnClickListener() {
+            createBlockView.setOnClickListener {
                 currentBlock = createBlockView
                 currentBlockIcon = createBlockIcon
                 currentCardIcon = cardBlockIcon
@@ -114,16 +143,13 @@ class CreatePalettesActivity : AppCompatActivity() {
         /* TextView */
         // Set up TextView
         paletteList = ArrayList(6)
-        var paletteBlockId = arrayOf(R.id.PaletteBlock1,R.id.PaletteBlock2,R.id.PaletteBlock3,R.id.PaletteBlock4,R.id.PaletteBlock5,R.id.PaletteBlock6);
+        val paletteBlockId = arrayOf(R.id.PaletteBlock1,R.id.PaletteBlock2,R.id.PaletteBlock3,R.id.PaletteBlock4,R.id.PaletteBlock5,R.id.PaletteBlock6)
 
         // Get TextView
         for(i in paletteBlockId.indices){
-            var createPaletteText : TextView = findViewById(paletteBlockId[i])
+            val createPaletteText : TextView = findViewById(paletteBlockId[i])
             paletteList.add(createPaletteText)
         }
-
-        // Progress bar
-        progressBar = findViewById(R.id.progressBarCreate)
 
         // PaletteName input
         paletteName = findViewById(R.id.NamePalette)
@@ -131,7 +157,7 @@ class CreatePalettesActivity : AppCompatActivity() {
         /* Create Palette */
         // Click on create button to upload palette
         createButton = findViewById(R.id.PaletteCreate)
-        createButton.setOnClickListener(){
+        createButton.setOnClickListener {
 
             // Show progress bar and disable button (to avoid multiple submission)
             progressBar.visibility = View.VISIBLE
@@ -156,7 +182,7 @@ class CreatePalettesActivity : AppCompatActivity() {
 
             // Get Firebase DB reference and key
             val referencePalettes = firebaseDatabase.getReference("palettes")
-            val key = referencePalettes.push().key;
+            val key = referencePalettes.push().key
 
             /* Combine bitmap and upload to firebase */
             // Combine bitmap to create a palette bitmap of 6 images
@@ -308,7 +334,7 @@ class CreatePalettesActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                adapter.filter.filter(p0);
+                adapter.filter.filter(p0)
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -318,7 +344,7 @@ class CreatePalettesActivity : AppCompatActivity() {
         // Click on the desired block name to set the image bitmap
         listBlocks.onItemClickListener = OnItemClickListener { parent, _, position, _ ->
             // Block selected
-            var blockSelected = parent.getItemAtPosition(position) as String
+            val blockSelected = parent.getItemAtPosition(position) as String
 
             // Increase palette size if the imageView was previously empty
             if(blockName[currentBlockIndex].isEmpty()){
@@ -326,7 +352,7 @@ class CreatePalettesActivity : AppCompatActivity() {
             }
 
             // Set the block name
-            blockName[currentBlockIndex] = "$blockSelected"
+            blockName[currentBlockIndex] = blockSelected
 
             // If the first block has changed, update palette hint
             if(currentBlockIndex == 0){
@@ -337,7 +363,7 @@ class CreatePalettesActivity : AppCompatActivity() {
             paletteList[currentBlockIndex].text = blockName[currentBlockIndex]
 
             // Get the drawable ID from block name
-            var blockId = blockSelected.lowercase().replace(" ","_")
+            val blockId = blockSelected.lowercase().replace(" ","_")
             val resId = resources.getIdentifier(
                 blockId, "drawable",
                 packageName
@@ -375,7 +401,7 @@ class CreatePalettesActivity : AppCompatActivity() {
         // Combine 0 + 1 -> top -> top + 2
         left = createBlock[0].drawable.toBitmap()
         right = createBlock[1].drawable.toBitmap()
-        var topLeftHalf = combineHorizontal(left,right)
+        val topLeftHalf = combineHorizontal(left,right)
 
         right = createBlock[2].drawable.toBitmap()
         val top = combineHorizontal(topLeftHalf!!,right)
@@ -384,7 +410,7 @@ class CreatePalettesActivity : AppCompatActivity() {
         // combine 3 + 4 -> bottom -> bottom + 5
         left = createBlock[3].drawable.toBitmap()
         right = createBlock[4].drawable.toBitmap()
-        var bottomLeftHalf = combineHorizontal(left,right)
+        val bottomLeftHalf = combineHorizontal(left,right)
 
         right = createBlock[5].drawable.toBitmap()
         val bottom = combineHorizontal(bottomLeftHalf!!,right)

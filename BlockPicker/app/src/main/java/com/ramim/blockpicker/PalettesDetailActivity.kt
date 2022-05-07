@@ -1,5 +1,6 @@
 package com.ramim.blockpicker
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -27,25 +28,25 @@ class PalettesDetailActivity : AppCompatActivity() {
 
         /* Load Palette Data */
         // IDs
-        var imageViewId = arrayOf(R.id.Block1,R.id.Block2,R.id.Block3,R.id.Block4,R.id.Block5,R.id.Block6);
-        var imageIconId = arrayOf(R.id.BlockIcon1,R.id.BlockIcon2,R.id.BlockIcon3,R.id.BlockIcon4,R.id.BlockIcon5,R.id.BlockIcon6)
-        var paletteBlockId = arrayOf(R.id.PaletteBlock1,R.id.PaletteBlock2,R.id.PaletteBlock3,R.id.PaletteBlock4,R.id.PaletteBlock5,R.id.PaletteBlock6);
+        val imageViewId = arrayOf(R.id.Block1,R.id.Block2,R.id.Block3,R.id.Block4,R.id.Block5,R.id.Block6)
+        val imageIconId = arrayOf(R.id.BlockIcon1,R.id.BlockIcon2,R.id.BlockIcon3,R.id.BlockIcon4,R.id.BlockIcon5,R.id.BlockIcon6)
+        val paletteBlockId = arrayOf(R.id.PaletteBlock1,R.id.PaletteBlock2,R.id.PaletteBlock3,R.id.PaletteBlock4,R.id.PaletteBlock5,R.id.PaletteBlock6)
 
         // Get palette information
-        var palette : Palettes = intent.getSerializableExtra("PALETTE") as Palettes
+        val palette : Palettes = intent.getSerializableExtra("PALETTE") as Palettes
 
         val blocks = arrayOf(palette.block1,palette.block2,palette.block3,palette.block4,palette.block5,palette.block6)
 
         // Set ImageView and TextView
         for(i in imageViewId.indices){
-            var createBlockView : ImageView = findViewById(imageViewId[i])
-            var createBlockIcon : ImageView = findViewById(imageIconId[i])
-            var paletteBlockText : TextView = findViewById(paletteBlockId[i])
+            val createBlockView : ImageView = findViewById(imageViewId[i])
+            val createBlockIcon : ImageView = findViewById(imageIconId[i])
+            val paletteBlockText : TextView = findViewById(paletteBlockId[i])
 
             paletteBlockText.text = blocks[i]
 
             // Get the drawable ID from block name
-            var blockId = blocks[i].lowercase().replace(" ","_")
+            val blockId = blocks[i].lowercase().replace(" ","_")
             val resId = resources.getIdentifier(
                 blockId, "drawable",
                 packageName
@@ -65,28 +66,28 @@ class PalettesDetailActivity : AppCompatActivity() {
         }
 
         // Palette title
-        var paletteName : TextView = findViewById(R.id.PaletteName)
+        val paletteName : TextView = findViewById(R.id.PaletteName)
         paletteName.text = palette.name
         title = palette.name
 
         // Author
-        var paletteAuthor : TextView = findViewById(R.id.PaletteAuthor)
+        val paletteAuthor : TextView = findViewById(R.id.PaletteAuthor)
         paletteAuthor.text = palette.author
 
         // Likes
-        var paletteSaved : TextView = findViewById(R.id.PaletteSaved)
+        val paletteSaved : TextView = findViewById(R.id.PaletteSaved)
         paletteSaved.text = palette.likes.toString()
 
         // Show player Avatar
-        var avatar : ImageView = findViewById(R.id.PaletteAuthorAvatar)
+        val avatar : ImageView = findViewById(R.id.PaletteAuthorAvatar)
         Picasso
             .get()
             .load("https://crafatar.com/avatars/${palette.minecraftUUID}")
             .into(avatar)
 
         // Share
-        var paletteShareButton : ImageButton = findViewById(R.id.PaletteShareButton)
-        paletteShareButton.setOnClickListener() {
+        val paletteShareButton : ImageButton = findViewById(R.id.PaletteShareButton)
+        paletteShareButton.setOnClickListener {
             ShareCompat.IntentBuilder(this)
                 .setType("text/plain")
                 .setChooserTitle("Share URL")
@@ -100,9 +101,13 @@ class PalettesDetailActivity : AppCompatActivity() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         firebaseDatabase = FirebaseDatabase.getInstance()
 
-        val UID = firebaseAuth.currentUser!!.uid
+        val UID = if(firebaseAuth.currentUser != null){
+            firebaseAuth.currentUser!!.uid
+        } else {
+            ""
+        }
 
-        var paletteSavedButton : ImageButton = findViewById(R.id.PaletteSavedButton)
+        val paletteSavedButton : ImageButton = findViewById(R.id.PaletteSavedButton)
 
         // Disable like button if we own the Palette
         if(palette.authorUID == UID){
@@ -119,50 +124,72 @@ class PalettesDetailActivity : AppCompatActivity() {
         }
 
         /* Update likes Firebase */
-        paletteSavedButton.setOnClickListener(){
+        paletteSavedButton.setOnClickListener {
 
-            val referencePalettes = firebaseDatabase.getReference("palettes")
+            // if the UID is empty, send to login screen
+            if (UID.isEmpty()){
+                // Remove listeners
+                firebaseDatabase
+                    .getReference("palettes")
+                    .removeEventListener(paletteListener)
 
-            // Like the palette, increment the counter and add user to Saved
-            if(!palette.liked){
-                paletteSavedButton.setImageResource(R.drawable.ic_favorite_red)
-                palette.liked = true
+                if (findPaletteListener != null){
+                    firebaseDatabase
+                        .getReference("palettes")
+                        .removeEventListener(findPaletteListener!!)
+                }
 
-                // Log it
-                firebaseAnalytics.logEvent("like_button_clicked_increment", null)
-
-                // Add user to "saved"
-                referencePalettes
-                    .child(palette.paletteID)
-                    .child("saved")
-                    .child(UID).setValue(true)
-
-                referencePalettes
-                    .child(palette.paletteID)
-                    .child("likes")
-                    .setValue(ServerValue.increment(1))
+                // Hide progress bar
+                // Go to login screen, clear backstack
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity( intent)
 
             }
-            // Unlike the Palette, decrement the counter and remove user from Saved
+            // the user is logged, update the palette information
             else {
-                paletteSavedButton.setImageResource(R.drawable.ic_favorite_border)
-                palette.liked = false
 
-                // Log it
-                firebaseAnalytics.logEvent("like_button_clicked_decrement", null)
+                val referencePalettes = firebaseDatabase.getReference("palettes")
+                // Like the palette, increment the counter and add user to Saved
+                if (!palette.liked) {
+                    paletteSavedButton.setImageResource(R.drawable.ic_favorite_red)
+                    palette.liked = true
 
-                // Remove user from "saved"
-                referencePalettes
-                    .child(palette.paletteID)
-                    .child("saved")
-                    .child(UID)
-                    .removeValue()
+                    // Log it
+                    firebaseAnalytics.logEvent("like_button_clicked_increment", null)
 
-                // Decrement palette like
-                referencePalettes
-                    .child(palette.paletteID)
-                    .child("likes")
-                    .setValue(ServerValue.increment(-1))
+                    // Add user to "saved"
+                    referencePalettes
+                        .child(palette.paletteID)
+                        .child("saved")
+                        .child(UID).setValue(true)
+
+                    referencePalettes
+                        .child(palette.paletteID)
+                        .child("likes")
+                        .setValue(ServerValue.increment(1))
+
+                }
+                // Unlike the Palette, decrement the counter and remove user from Saved
+                else {
+                    paletteSavedButton.setImageResource(R.drawable.ic_favorite_border)
+                    palette.liked = false
+
+                    // Log it
+                    firebaseAnalytics.logEvent("like_button_clicked_decrement", null)
+
+                    // Remove user from "saved"
+                    referencePalettes
+                        .child(palette.paletteID)
+                        .child("saved")
+                        .child(UID)
+                        .removeValue()
+
+                    // Decrement palette like
+                    referencePalettes
+                        .child(palette.paletteID)
+                        .child("likes")
+                        .setValue(ServerValue.increment(-1))
+                }
             }
         }
     }

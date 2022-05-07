@@ -30,8 +30,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:scaleType="fitXY"
+                android:contentDescription="@string/select_block_description"
 
+                android:scaleType="fitXY"
                 app:layout_constraintBottom_toTopOf="@+id/BlockBitmap4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -43,8 +44,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:scaleType="fitXY"
+                android:contentDescription="@string/select_block_description"
 
+                android:scaleType="fitXY"
                 app:layout_constraintBottom_toTopOf="@+id/BlockBitmap5"
                 app:layout_constraintStart_toEndOf="@+id/BlockBitmap1"
                 app:layout_constraintTop_toTopOf="parent"
@@ -56,8 +58,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:scaleType="fitXY"
+                android:contentDescription="@string/select_block_description"
 
+                android:scaleType="fitXY"
                 app:layout_constraintBottom_toTopOf="@+id/BlockBitmap6"
                 app:layout_constraintStart_toEndOf="@+id/BlockBitmap2"
                 app:layout_constraintTop_toTopOf="parent"
@@ -70,9 +73,10 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
 
+                android:contentDescription="@string/select_block_description"
                 android:scaleType="fitXY"
-                app:layout_constraintStart_toStartOf="parent"
 
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/BlockBitmap1"
                 app:layout_constraintWidth_percent="0.3333"
                 app:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
@@ -83,6 +87,7 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
 
+                android:contentDescription="@string/select_block_description"
                 android:scaleType="fitXY"
                 app:layout_constraintStart_toEndOf="@+id/BlockBitmap4"
                 app:layout_constraintTop_toBottomOf="@+id/BlockBitmap2"
@@ -95,9 +100,10 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
 
+                android:contentDescription="@string/select_block_description"
                 android:scaleType="fitXY"
-                app:layout_constraintStart_toEndOf="@+id/BlockBitmap5"
 
+                app:layout_constraintStart_toEndOf="@+id/BlockBitmap5"
                 app:layout_constraintTop_toBottomOf="@+id/BlockBitmap3"
                 app:layout_constraintWidth_percent="0.3333"
                 app:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
