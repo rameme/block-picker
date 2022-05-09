@@ -98,6 +98,7 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
             .into(holder.blockBitmap6)
 
         // Share Palette
+        holder.paletteShareButton.contentDescription = context.resources.getString(R.string.palettes_share, currentPalettes.name)
         holder.paletteShareButton.setOnClickListener {
             ShareCompat.IntentBuilder(context)
                 .setType("text/plain")
@@ -130,6 +131,7 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
 
         /* Update like button icon */
         // Disable like button if we own the Palette
+        holder.paletteSavedButton.contentDescription = context.resources.getString(R.string.palettes_save, currentPalettes.name)
         if(currentPalettes.authorUID == UID){
             holder.paletteSavedButton.isEnabled = false
             holder.paletteSavedButton.setImageResource(R.drawable.ic_favorite)
@@ -148,6 +150,7 @@ class PalettesAdapter(val palettes: List<Palettes>) : RecyclerView.Adapter<Palet
 
             // if the UID is empty, send to login screen
             if (UID.isEmpty()){
+
                 // Remove listeners
                 firebaseDatabase
                     .getReference("palettes")

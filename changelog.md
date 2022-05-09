@@ -1,5 +1,9 @@
 # Changelog
 
+## Alpha 3.0
+- Added accessibility support to button
+- Added credits to login page (temporary)
+
 ## Alpha 2.0
 - Allow users to use the app without logging in
 - Fix Android Studio warning messages

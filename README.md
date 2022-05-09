@@ -15,3 +15,8 @@ Top Palette | Profile | Palette | Create Palette |
 # Author
 - Name: Ramim 
 - Github: [https://github.com/rameme](https://github.com/rameme)
+
+# Credits
+This application is inspired by [Block Palette](https://www.blockpalettes.com/) by [Nate Boland](https://twitter.com/ntbol)
+
+### NOT OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG

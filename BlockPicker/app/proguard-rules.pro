@@ -36,3 +36,8 @@
 -dontwarn org.openjsse.**
 
 -dontobfuscate
+
+# keep CREATOR for referenced parcelables since it is accessed via reflection
+-keepclassmembers class * implements android.os.Parcelable {
+    static ** CREATOR;
+}
