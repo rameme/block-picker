@@ -50,8 +50,10 @@
     <string name="palettes_name">%1$s</string>
     <string name="palettes_author">%1$s</string>
     <string name="palettes_saved">%1$s</string>
-    <string name="palettes_save">Guardar</string>
-    <string name="palettes_share">Cuota</string>
+
+    <string name="palettes_save">Guardar %1$s</string>
+    <string name="palettes_share">Cuota %1$s</string>
+
     <string name="palettes_description">Paletas de bloques destacadas más preferidas por nuestros usuarios.</string>
     <string name="palettes_search">Búsqueda</string>
 

@@ -49,8 +49,10 @@
     <string name="palettes_name">%1$s</string>
     <string name="palettes_author">%1$s</string>
     <string name="palettes_saved">%1$s</string>
-    <string name="palettes_save">Save</string>
-    <string name="palettes_share">Share</string>
+
+    <string name="palettes_save">Save %1$s</string>
+    <string name="palettes_share">Share %1$s</string>
+
     <string name="palettes_description">Featured block palettes most liked by our users.</string>
     <string name="palettes_search">Search</string>
 
@@ -93,6 +95,9 @@
     <!-- Blocks -->
     <!-- SPINNER -->
     <string name="defaultSelected">Tap on image to set block</string>
+
+    <string name="mojang" translatable="false">NOT OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG</string>
+    <string name="credit" translatable="false">This application is inspired by Block Palette by Nate Boland</string>
 
     <!-- No Translation -->
     <string-array name="blocks">

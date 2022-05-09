@@ -14,7 +14,8 @@
 
         <activity
             android:name=".LoginActivity"
-            android:parentActivityName=".PalettesActivity" />
+            android:parentActivityName=".PalettesActivity"
+            android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".SignupActivity"
